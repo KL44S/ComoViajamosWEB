@@ -1,0 +1,19 @@
+﻿body {
+    font-family: 'Roboto Condensed', sans-serif !important;
+    background-color: #393B50;
+}
+
+.moment-picker {
+    font-size: 12px !important;
+}
+
+.highlighted.selected {
+    background: none !important;
+    background-color: #ee7c7f !important;
+    color: #FCFFFF !important;
+}
+
+.highlighted {
+    background: none !important;
+    background-color: #e4eef5 !important;
+}

@@ -1,0 +1,74 @@
+﻿<div class="review" ng-class="{'review-form-hidden': navbar.isReviewFormClosed}">
+    <div  class="review-main">
+
+        <div class="review-tab">
+            <div class="review-tab-container" ng-click="toogleForm();">
+                <label class="review-tab-text">¿CÓMO VIAJASTE?</label>
+            </div>
+        </div>
+
+
+        <div class="review-form">
+            <div class="form">
+                <h1 class="review-title">CONTANOS COMO VIAJASTE</h1>
+
+                <form>
+                    <div class="form-block">
+                        <label class="label-form">CONTANOS EN QUÉ VIAJASTE</label>
+
+                        <div class="subform-block">
+                            <label>
+                                <input class="radio-form" type="radio" id="subte" name="radio-group" checked>
+                                <label class="label-input" for="subte">Subte</label>
+                            </label>
+                            <label>
+                                <input class="radio-form" type="radio" id="colectivo" name="radio-group" checked>
+                                <label class="label-input" for="colectivo">Colectivo</label>
+                            </label>
+                            <label>
+                                <input class="radio-form" type="radio" id="tren" name="radio-group" checked>
+                                <label class="label-input" for="tren">Tren</label>
+                            </label>
+                        </div>
+
+                        <div class="subform-block">
+                            <label class="label-input">Línea</label>
+                            <select>
+                                <option>linea</option>
+                            </select>
+                            <label class="label-input">Ramal</label>
+                            <select>
+                                <option>linea</option>
+                            </select>
+                            <label class="label-input">Orientación</label>
+                            <select>
+                                <option>linea</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <label class="label-form">¿EN QUÉ FRANJA HORARIA (APROX) VIAJASTE?</label>
+
+                        <div class="subform-block">
+                            <label class="label-input">Desde</label>
+                            <input ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                            <input ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
+                        </div>
+
+                        <div class="subform-block">
+                            <label class="label-input">Hasta</label>
+                            <input ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                            <input ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
