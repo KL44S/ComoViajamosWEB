@@ -33,6 +33,7 @@
 
 .review-tab-text {
     writing-mode: vertical-lr;
+    -ms-writing-mode: tb-lr;
     transform: rotate(180deg);
     color: #EE7C7F;
     cursor: pointer;
@@ -102,16 +103,29 @@
     outline: none;
     padding: 10px;
     background-color: #FCFFFF;
-    color: #EE7C7F !important;
+    color: #EE7C7F;
+    font-size: 12px;
 }
 
-    .form-block input::-webkit-input-placeholder,
-    .form-block input::-moz-placeholder,
-    .form-block input:-ms-input-placeholder,
-    .form-block input:-moz-placeholder,
-    .form-block input {
-        color: #EE7C7F !important;
-    }
+.form-block input::-webkit-input-placeholder {
+    color: #EE7C7F !important;
+    font-size: 12px;
+}
+
+.form-block input::-moz-placeholder {
+    color: #EE7C7F !important;
+    font-size: 12px;
+}
+
+.form-block input::-ms-placeholder {
+    color: #EE7C7F !important;
+    font-size: 12px;
+}
+
+.form-block input::placeholder {
+    color: #EE7C7F !important;
+    font-size: 12px;
+}
 
 [type="radio"]:checked,
 [type="radio"]:not(:checked) {

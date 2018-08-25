@@ -2,11 +2,13 @@
     var app = angular.module("CV");
 
     app.factory("reviewConstants", function () {
-        var navbarConstants = {
-            "iconBasePath": "images/icons/",
+
+        var reviewConstants = {
+            minutesRound: 10,
+            minutesBetweeness: 30
         };
 
-        return navbarConstants;
+        return reviewConstants;
     });
 
 }());
