@@ -1,4 +1,4 @@
-﻿<div class="review" ng-class="{'review-form-hidden': navbar.isReviewFormClosed}">
+﻿<div class="review" ng-class="{'review-form-hidden': reviewForm.isReviewFormClosed}">
     <div  class="review-main">
 
         <div class="review-tab">
@@ -17,24 +17,16 @@
                         <label class="label-form">CONTANOS EN QUÉ VIAJASTE</label>
 
                         <div class="subform-block">
-                            <label>
-                                <input class="radio-form" type="radio" id="subte" name="radio-group" checked>
-                                <label class="label-input" for="subte">Subte</label>
-                            </label>
-                            <label>
-                                <input class="radio-form" type="radio" id="colectivo" name="radio-group" checked>
-                                <label class="label-input" for="colectivo">Colectivo</label>
-                            </label>
-                            <label>
-                                <input class="radio-form" type="radio" id="tren" name="radio-group" checked>
-                                <label class="label-input" for="tren">Tren</label>
+                            <label ng-repeat="transportType in transportTypes">
+                                <input class="radio-form" type="radio" id="subte" name="radio-group" checked ng-click="transportTypeHasBeenSelected(transportType.transportTypeId);">
+                                <label class="label-input" for="subte">{{transportType.description}}</label>
                             </label>
                         </div>
 
                         <div class="subform-block">
                             <label class="label-input">Línea</label>
                             <select>
-                                <option>linea</option>
+                                <option ng-repeat="transport in transports" value="{{transport.transportId}}">{{transport.description}}</option>
                             </select>
                             <label class="label-input">Ramal</label>
                             <select>

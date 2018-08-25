@@ -3,7 +3,7 @@
 
     app.factory("constants", function () {
         var constants = {
-            "baseUri": "https://dream-team-metro.herokuapp.com/api/", //http://localhost:49922/api/
+            "baseUri": "http://localhost:7320/api/", //https://como-viajamos.herokuapp.com/api/
             "interalErrorPath": "error.html",
             "home": "index.html",
             "parameterPrefix": "?",
