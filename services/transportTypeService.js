@@ -1,15 +1,25 @@
 ﻿(function () {
     var app = angular.module("CV");
 
-    app.factory("transportTypeService", ["httpService", "transportTypeConstants", "constants",
-        function (httpService, serviceConstants, constants) {
+    app.factory("transportTypeService", ["httpService", "transportTypeConstants", "constants", "$q",
+        function (httpService, serviceConstants, constants, $q) {
 
             var baseUri = constants.baseUri + serviceConstants.resourceName;
 
             var transportTypeService = {};
 
             transportTypeService.getTransportTypes = function () {
-                return httpService.get(baseUri, { cache: true });
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+
+                httpService.get(baseUri, { cache: true }).then(function (response) {
+                    deferred.resolve(response.data);
+
+                }, function errorCallback(error) {
+                    deferred.reject(error);
+                });
+
+                return promise;
             };
 
             return transportTypeService;

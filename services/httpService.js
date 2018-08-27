@@ -23,9 +23,8 @@
                 var promise = deferred.promise;
 
                 fillOptions(options);
-                console.log(options);
-                $http.get(uri, options).then(function successCallback(response) {
 
+                $http.get(uri, options).then(function successCallback(response) {
                     deferred.resolve(response);
 
                 }, function errorCallback(error) {

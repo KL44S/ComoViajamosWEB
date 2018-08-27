@@ -1,8 +1,8 @@
 ﻿(function () {
     var app = angular.module("CV");
 
-    app.factory("transportService", ["httpService", "transportConstants", "transportTypeService", "uriParametersService", "constants",
-        function (httpService, serviceConstants, transportTypeService, uriParametersService, constants) {
+    app.factory("transportService", ["httpService", "transportConstants", "transportTypeService", "uriParametersService", "constants", "$q",
+        function (httpService, serviceConstants, transportTypeService, uriParametersService, constants, $q) {
 
             var baseUri = constants.baseUri + serviceConstants.resourceName;
 
@@ -29,9 +29,19 @@
             };
 
             transportService.getTransports = function (transportTypeId) {
-                var uri = makeAndGetParameters(undefined, transportTypeId);
+                var uri = baseUri + makeAndGetParameters(undefined, transportTypeId);
 
-                return httpService.get(uri, { cache: true });
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+
+                httpService.get(uri, { cache: true }).then(function (response) {
+                    deferred.resolve(response.data);
+
+                }, function errorCallback(error) {
+                    deferred.reject(error);
+                });
+
+                return promise;
             };
 
             return transportService;

@@ -2,8 +2,8 @@
 
     var app = angular.module("CV");
 
-    app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService",
-        function ($scope, reviewConstants, constants, transportService) {
+    app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http",
+        function ($scope, reviewConstants, constants, transportService, $http) {
 
             //Privado
             function getFormattedDate(momentDate) {
