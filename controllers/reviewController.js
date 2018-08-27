@@ -12,6 +12,17 @@
                 return momentDate;
             }
 
+            function initDates() {
+                var dateFrom = moment();
+                dateFrom = getFormattedDate(dateFrom);
+                dateFrom = dateFrom.minutes(dateFrom.minutes() - reviewConstants.minutesBetweeness);
+                $scope.dateTimeFrom = dateFrom;
+
+                var dateUntil = moment();
+                dateUntil = getFormattedDate(dateUntil);
+                $scope.dateTimeUntil = dateUntil;
+            }
+
             function init() {
                 $scope.reviewForm = {
                     isReviewFormClosed: true,
@@ -29,15 +40,6 @@
                     });
                 };
 
-                var dateFrom = moment();
-                dateFrom = getFormattedDate(dateFrom);
-                dateFrom = dateFrom.minutes(dateFrom.minutes() - reviewConstants.minutesBetweeness);
-                $scope.dateTimeFrom = dateFrom;
-
-                var dateUntil = moment();
-                dateUntil = getFormattedDate(dateUntil);
-                $scope.dateTimeUntil = dateUntil;
-
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
 
@@ -46,6 +48,8 @@
             }
 
             //público
+            initDates();
+
             angular.element(document).ready(function () {
                 init();
             });
