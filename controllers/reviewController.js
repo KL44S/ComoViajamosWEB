@@ -2,8 +2,8 @@
 
     var app = angular.module("CV");
 
-    app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http",
-        function ($scope, reviewConstants, constants, transportService, $http) {
+    app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService",
+        function ($scope, reviewConstants, constants, transportService, $http, customSelectService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -36,7 +36,7 @@
 
                 $scope.transportTypeHasBeenSelected = function (transportTypeId) {
                     transportService.getTransports(transportTypeId).then(function (transports) {
-                        $scope.transports = transports;
+                        $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
                     });
                 };
 
@@ -45,6 +45,8 @@
 
                     $scope.hasThePageBeenLoaded = false;
                 });
+
+                $scope.selectedElement = { id: null, description: "" };
             }
 
             //público

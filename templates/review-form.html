@@ -14,47 +14,79 @@
 
                 <form>
                     <div class="form-block">
-                        <label class="label-form">CONTANOS EN QUÉ VIAJASTE</label>
+                        <label class="label-form">CONTANOS EN QUÉ VIAJASTE<span class="required"></span></label>
 
                         <div class="subform-block">
                             <label ng-repeat="transportType in transportTypes" style>
-                                <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group" checked>
+                                <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group">
                                 <label class="label-input" for="{{transportType.description}}" ng-click="transportTypeHasBeenSelected(transportType.transportTypeId);">{{transportType.description}}</label>
                             </label>
                         </div>
 
                         <div class="subform-block">
-                            <label class="label-input">Línea</label>
+
+                            <label class="label-input">Línea<span class="required"></span></label>
+                            <div class="custom-select">
+                                <custom-select items="transports" bind="selectedElement"></custom-select>
+                            </div>
+
+                            <label class="label-input">Ramal<span class="required"></span></label>
+                            <div class="custom-select">
+                                <custom-select items="transports" bind="selectedElement"></custom-select>
+                            </div>
+
+                            <label class="label-input">Orientación<span class="required"></span></label>
+                            <div class="custom-select">
+                                <custom-select items="transports" bind="selectedElement"></custom-select>
+                            </div>
+                        </div>
+                           
+                        </div>
+                    </div>
+
+                    <div class="form-block">
+                        <label class="label-form">¿EN QUÉ FRANJA HORARIA (APROX) VIAJASTE?<span class="required"></span></label>
+
+                        <div class="subform-block">
+                            <label class="label-input">Desde<span class="required"></span></label>
+                            <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                            <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
+                        </div>
+
+                        <div class="subform-block">
+                            <label class="label-input">Hasta<span class="required"></span></label>
+                            <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                            <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
+                        </div>
+
+                    </div>
+
+                    <div class="form-block">
+                        <div class="subform-block">
+                            <label class="label-form">¿CÓMO VIAJASTE?<span class="required"></span></label>
                             <select>
-                                <option ng-repeat="transport in transports" value="{{transport.transportId}}">{{transport.description}}</option>
+                                <option ng-repeat="feeling in feelings" value="{{feeling.feelingId}}">{{feeling.description}}</option>
                             </select>
-                            <label class="label-input">Ramal</label>
+                        </div>
+
+                        <div class="subform-block">
+                            <label class="label-form">CONTANOS POR QUÉ<span class="required"></span></label>
                             <select>
-                                <option>linea</option>
-                            </select>
-                            <label class="label-input">Orientación</label>
-                            <select>
-                                <option>linea</option>
+                                <option ng-repeat="feelingReason in feelingReasons" value="{{feelingReason.feelingReasonId}}">{{feelingReason.description}}</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-block">
-                        <label class="label-form">¿EN QUÉ FRANJA HORARIA (APROX) VIAJASTE?</label>
-
-                        <div class="subform-block">
-                            <label class="label-input">Desde</label>
-                            <input ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                            <input ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
-                        </div>
-
-                        <div class="subform-block">
-                            <label class="label-input">Hasta</label>
-                            <input ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                            <input ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
-                        </div>
-
+                        <label class="label-form">(OPCIONAL) ALGUN COMENTARIO QUE QUIERAS HACER</label>
+                        <textarea rows="2" cols="40"></textarea>
                     </div>
+
+                    <div class="form-block">
+                        <button class="review-submit-btn">LISTO</button>
+                    </div>
+
+
                 </form>
             </div>
 
