@@ -50,6 +50,21 @@
         }
     });
 
+    app.directive('bkVideo', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/bk-video.html'
+        }
+    });
+
+    app.directive('navbar', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/navbar.html',
+            controller: 'navbarController'
+        }
+    });
+
     app.directive('customSelect', function () {
         return {
             restrict: 'E',

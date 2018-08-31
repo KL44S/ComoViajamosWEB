@@ -1,0 +1,17 @@
+﻿.video {
+    z-index: -2;
+}
+
+.bk-video {
+    z-index: -1;
+    background-color: rgba(17, 19, 40, 0.5);
+}
+
+.bk-video,
+.video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+}

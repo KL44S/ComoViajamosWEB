@@ -1,0 +1,17 @@
+﻿<div class="navbar">
+    <div class="left-navbar-items">
+        <div class="logo-label">Cómo Viajamos</div>
+    </div>
+
+    <div class="right-navbar-items">
+        <a ng-repeat="option in options" ng-href="{{option.link}}">{{option.description}}</a>
+        <i class="icon-menu" ng-click="openSidebar();"></i>
+    </div>
+</div>
+
+<div class="sidebar" ng-class="{'open': isSidebarOpen}">
+    <i class="icon-close sidebar-button" ng-click="closeSidebar();"></i>
+    <div class="sidebar-items">
+        <a ng-repeat="option in options" ng-href="{{option.link}}">{{option.description}}</a>
+    </div>
+</div>
