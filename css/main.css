@@ -54,14 +54,18 @@
     cursor: pointer;
 }
 
+.logo-main {
+    font-weight: 400;
+    /*font-family: 'Gloria Hallelujah', cursive;*/
+    /*font-family: 'Amatic SC', cursive;*/
+    font-family: 'Merienda', cursive;
+}
+
 @media(min-width : 200px) {
     .main-h1 {
         font-size: 60px;
         letter-spacing: 4px;
-        font-weight: 700;
         margin-top: 0;
-        font-family: 'Gloria Hallelujah', cursive;
-        /*font-family: 'Amatic SC', cursive;*/
     }
 
     .main {
@@ -81,40 +85,23 @@
 @media(min-width : 321px) {
     .main-h1 {
         font-size: 70px;
-        letter-spacing: 4px;
-        font-weight: 700;
-        margin-top: 0;
-        font-family: 'Gloria Hallelujah', cursive;
-        /*font-family: 'Amatic SC', cursive;*/
     }
 
     .main {
         width: 90%;
-        height: auto;
-        text-align: center;
     }
 }
 
 @media(min-width : 720px) {
     .main-h1 {
         font-size: 90px;
-        letter-spacing: 4px;
-        font-weight: 700;
-        margin-top: 0;
-        font-family: 'Gloria Hallelujah', cursive;
-        /*font-family: 'Amatic SC', cursive;*/
     }
 
     .main {
         width: 60%;
-        height: auto;
-        text-align: center;
     }
 
     .main-p {
-        font-size: 20px;
-        letter-spacing: 1px;
-        font-weight: 300;
         margin-bottom: 50px;
     }
 }

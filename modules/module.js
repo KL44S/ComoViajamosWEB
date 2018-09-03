@@ -57,6 +57,13 @@
         }
     });
 
+    app.directive('popupHeader', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/popup-header.html'
+        }
+    });
+
     app.directive('navbar', function () {
         return {
             restrict: 'E',

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="CV">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +12,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700|Gloria+Hallelujah" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merienda:400,700" rel="stylesheet">
     <link rel="stylesheet" href="css/angular-moment-picker.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/review.css">
@@ -19,16 +20,19 @@
     <link rel="stylesheet" href="css/bk-video.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/fontello.css">
+    <link rel="stylesheet" href="css/popup.css">
 </head>
-<body ng-app="CV">
+
+<body ng-controller="mainController">
+
     <navbar></navbar>
     <bk-video></bk-video>
 
     <div class="main-container">
         <div class="main">
-            <h1 class="main-h1">Cómo Viajamos</h1>
+            <h1 class="logo-main main-h1">Cómo Viajamos</h1>
             <p class="main-p">Contanos cómo viajaste y contribuí a realizar una estadística que refleje realmente cómo se viaja.</p>
-            <button class="main-btn">CONTANOS COMO VIAJASTE</button>
+            <button ng-click="enterReview();" class="main-btn">CONTANOS COMO VIAJASTE</button>
         </div>
     </div>
 
@@ -40,11 +44,13 @@
 
     <script src="modules/module.js"></script>
 
+    <script src="model/popupParameters.js"></script>
     <script src="model/pair.js"></script>
     <script src="model/selectOption.js"></script>
     <script src="model/navbarOption.js"></script>
 
     <script src="constants/constants.js"></script>
+    <script src="constants/popupConstants.js"></script>
     <script src="constants/httpCodesConstants.js"></script>
     <script src="constants/httpConstants.js"></script>
     <script src="constants/transportTypeConstants.js"></script>
@@ -55,10 +61,12 @@
     <script src="services/uriParametersMaker.js"></script>
     <script src="services/httpService.js"></script>
     <script src="services/redirectService.js"></script>
+    <script src="services/popupService.js"></script>
     <script src="services/transportTypeService.js"></script>
     <script src="services/transportService.js"></script>
 
     <script src="controllers/navbarController.js"></script>
     <script src="controllers/reviewController.js"></script>
+    <script src="controllers/mainController.js"></script>
 </body>
 </html>
