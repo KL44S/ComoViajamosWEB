@@ -1,6 +1,8 @@
-﻿<div class="select-container">
-    <input ng-click="toogleDropdown();" ng-blur="onBlur();" class="chosen-value" type="text" ng-keyup="filter();" ng-model="selectedItem" placeholder="Buscar...">
-    <ul ng-class="{open: isDropDownOpened}" class="value-list">
-        <li ng-repeat="item in items" ng-class="{closed: item.filtered}" ng-mousedown="itemHasBeenSelected(item, $event);">{{item.description}}</li>
-    </ul>
+﻿<div class="select-select" ng-class="{open: isDropDownOpened}">
+    <i ng-mousedown="toogleDropdown();" class="icon-dropdown"></i>
+    <input ng-click="openDropdown();" ng-blur="onBlur();" type="text" ng-keyup="filter();" ng-model="selectedItem" placeholder="Buscar...">
 </div>
+
+<ul ng-class="{open: isDropDownOpened}" class="select-list">
+    <li ng-repeat="item in items" ng-class="{closed: item.filtered}" ng-mousedown="itemHasBeenSelected(item, $event);">{{item.description}}</li>
+</ul>

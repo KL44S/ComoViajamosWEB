@@ -11,6 +11,11 @@
     justify-content: center;
 }
 
+popup-body {
+    float: left;
+    width: 100%;
+}
+
 .popup-content {
     height: auto;
     z-index: 99999 !important;
@@ -32,11 +37,11 @@
 
 .popup-close {
     float: right;
-    color: white;
+    color: black;
     font-size: 20px;
     opacity: 0.9;
     transition: opacity 0.2s;
-    margin: 26px;
+    margin-top: 5px;
     cursor: pointer;
 }
 
@@ -46,7 +51,6 @@
 }
 
 popup-header {
-    float: left;
     width: 100%;
 }
 

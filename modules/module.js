@@ -78,7 +78,8 @@
             templateUrl: 'templates/custom-select.html',
             scope: {
                 bind: '=',
-                items: '='
+                items: '=',
+                change: '&'
             },
             link: function (scope, element, attrs) {
 
@@ -95,11 +96,15 @@
                     if ($event.which === 1) {
                         scope.selectedItem = item.description;
                         scope.bind = item;
-
+                        
                         clearItemsFiltered();
 
                         scope.itemSelected = true;
                         scope.isDropDownOpened = false;
+
+                        if (scope.change != undefined) {
+                            scope.change();
+                        };
                     }
                 };
 
@@ -109,6 +114,11 @@
                     if (scope.isDropDownOpened) {
                         scope.itemSelected = false;
                     }
+                };
+
+                scope.openDropdown = function () {
+                    scope.isDropDownOpened = true;
+                    scope.itemSelected = false;
                 };
 
                 scope.onBlur = function () {

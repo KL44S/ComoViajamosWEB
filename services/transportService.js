@@ -1,8 +1,8 @@
 ﻿(function () {
     var app = angular.module("CV");
 
-    app.factory("transportService", ["httpService", "transportConstants", "transportTypeService", "uriParametersService", "constants", "$q",
-        function (httpService, serviceConstants, transportTypeService, uriParametersService, constants, $q) {
+    app.factory("transportService", ["httpService", "transportConstants", "transportTypeService", "uriParametersService", "constants", "$q", "transportBranchService",
+        function (httpService, serviceConstants, transportTypeService, uriParametersService, constants, $q, transportBranchService) {
 
             var baseUri = constants.baseUri + serviceConstants.resourceName;
 
@@ -26,6 +26,10 @@
 
             transportService.getTransportTypes = function () {
                 return transportTypeService.getTransportTypes();
+            };
+
+            transportService.getTransportBranches = function (transportId) {
+                return transportBranchService.getTransportBranches(transportId);
             };
 
             transportService.getTransports = function (transportTypeId) {

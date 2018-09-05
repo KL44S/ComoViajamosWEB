@@ -2,8 +2,8 @@
 
     var app = angular.module("CV");
 
-    app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService",
-        function ($scope, reviewConstants, constants, transportService, $http, customSelectService) {
+    app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
+        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -24,33 +24,78 @@
             }
 
             function init() {
-                $scope.reviewForm = {
-                    isReviewFormClosed: true,
-                    openSidebarIcon: "icon-menu",
-                    closeSidebarIcon: "icon-close"
-                };
-
-                $scope.toogleForm = function () {
-                    $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
-                };
-
-                $scope.transportTypeHasBeenSelected = function (transportTypeId) {
-                    transportService.getTransports(transportTypeId).then(function (transports) {
-                        $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
-                    });
-                };
-
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
 
-                    $scope.hasThePageBeenLoaded = false;
-                });
+                    /*reviewService.getReviewFeelings().then(function (feelings) {
+                        $scope.feelings = feelings;
 
-                $scope.selectedElement = { id: null, description: "" };
+                        $scope.hasThePageBeenLoaded = false;
+                    });*/
+                });
             }
 
             //público
             initDates();
+
+            $scope.reviewForm = {
+                isReviewFormClosed: true,
+                openSidebarIcon: "icon-menu",
+                closeSidebarIcon: "icon-close"
+            };
+
+            $scope.toogleForm = function () {
+                $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
+            };
+
+            $scope.selectedTransport = new SelectOption();
+            $scope.selectedBranch = new SelectOption();
+            $scope.selectedOrientation = new SelectOption();
+            $scope.selectedFeeling = new SelectOption();
+
+            $scope.transportTypeHasBeenSelected = function (transportTypeId) {
+                transportService.getTransports(transportTypeId).then(function (transports) {
+                    $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
+                });
+            };
+
+            $scope.transportHasBeenSelected = function () {
+                var transportId = $scope.selectedTransport.value;
+                console.log($scope.selectedTransport);
+
+                transportService.getTransportBranches(transportId).then(function (branches) {
+                    $scope.branches = customSelectService.GetCustomSelectArrayOptions(branches, "branchId", "description");
+                });
+            };
+
+            $scope.branchHasBeenSelected = function () {
+                var branchId = $scope.selectedBranch.value;
+                var arrayFilters = [
+                    new ArrayFilter("branchId", branchId)
+                ];
+
+                var branch = arrayService.getFirstArrayElementByFilters($scope.branches, arrayFilters);
+
+                $scope.orientations = branch.orientations;
+            };
+
+            $scope.feelingHasBeenSelected = function () {
+                var feelingId = $scope.selectedFeeling.value;
+
+                reviewService.getReviewFeelingReasons(feelingId).then(function (reasons) {
+                    $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
+                });
+            };
+
+            $scope.saveReview = function () {
+                var review = {
+
+                };
+
+                reviewService.saveReview(review).then(function (reasons) {
+                    $scope.dismissPopup();
+                });
+            };
 
             angular.element(document).ready(function () {
                 init();

@@ -8,7 +8,7 @@
             popupService.open(new PopupParameters($scope,
                 "templates/review-form.html",
                 "reviewController",
-                "md"));
+                "sm"));
         };
     }]);
 
