@@ -20,17 +20,17 @@
 
                         <label class="label-input">Línea<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="transports" bind="selectedTransport" change="transportHasBeenSelected()"></custom-select>
+                            <custom-select items="transports" selected="selectedTransport" change="transportHasBeenSelected(selectedItem);"></custom-select>
                         </div>
 
                         <label class="label-input">Ramal<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="branches" bind="selectedBranch" change="branchHasBeenSelected()"></custom-select>
+                            <custom-select items="branches" selected="selectedBranch" change="branchHasBeenSelected(selectedItem);"></custom-select>
                         </div>
 
                         <label class="label-input">Orientación<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="orientations" bind="selectedOrientation"></custom-select>
+                            <custom-select items="orientations" selected="selectedOrientation" change="orientationHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
 
@@ -56,22 +56,17 @@
                 <div class="form-block">
                     <div class="subform-block">
                         <label class="label-form">¿CÓMO VIAJASTE?<span class="required"></span></label>
-                        <select>
-                            <option ng-repeat="feeling in feelings" value="{{feeling.feelingId}}">{{feeling.description}}</option>
-                        </select>
+                        <div class="custom-select">
+                            <custom-select items="feelings" selected="selectedFeeling" change="feelingHasBeenSelected(selectedItem);"></custom-select>
+                        </div>
                     </div>
 
                     <div class="subform-block">
                         <label class="label-form">CONTANOS POR QUÉ<span class="required"></span></label>
-                        <select>
-                            <option ng-repeat="feelingReason in feelingReasons" value="{{feelingReason.feelingReasonId}}">{{feelingReason.description}}</option>
-                        </select>
+                        <div class="custom-select">
+                            <custom-select items="reasons" selected="selectedReason"></custom-select>
+                        </div>
                     </div>
-                </div>
-
-                <div class="form-block">
-                    <label class="label-form">(OPCIONAL) ALGUN COMENTARIO QUE QUIERAS HACER</label>
-                    <textarea rows="2" cols="40"></textarea>
                 </div>
 
                 <div class="form-block">
@@ -113,17 +108,17 @@
 
                         <label class="label-input">Línea<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="transports" bind="selectedElement"></custom-select>
+                            <custom-select items="transports" selected="selectedElement"></custom-select>
                         </div>
 
                         <label class="label-input">Ramal<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="transports" bind="selectedElement"></custom-select>
+                            <custom-select items="transports" selected="selectedElement"></custom-select>
                         </div>
 
                         <label class="label-input">Orientación<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="transports" bind="selectedElement"></custom-select>
+                            <custom-select items="transports" selected="selectedElement"></custom-select>
                         </div>
                     </div>
 

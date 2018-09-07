@@ -5,7 +5,8 @@
 
         var reviewConstants = {
             minutesRound: 10,
-            minutesBetweeness: 30
+            minutesBetweeness: 30,
+            resourceName: "TravelReview",
         };
 
         return reviewConstants;

@@ -77,7 +77,7 @@
             restrict: 'E',
             templateUrl: 'templates/custom-select.html',
             scope: {
-                bind: '=',
+                selectedItem: '=selected',
                 items: '=',
                 change: '&'
             },
@@ -87,25 +87,33 @@
                     for (var i = 0; i < scope.items.length; i++) {
                         var currentItem = scope.items[i];
                         currentItem.filtered = false;
-                    }
-                }
+                    };
+                };
+
+                function executeCallback() {
+                    if (scope.change != undefined) {
+                        scope.change({ selectedItem: scope.selected});
+                    };
+                };
+
+                function doItemHasBeenSelected(item) {
+                    scope.selectedItem = item.description;
+                    scope.selected = item;
+
+                    clearItemsFiltered();
+
+                    scope.itemSelected = true;
+                    scope.isDropDownOpened = false;
+                    executeCallback();
+                };
 
                 scope.isDropDownOpened = false;
+                scope.selected = new SelectOption();
 
                 scope.itemHasBeenSelected = function (item, $event) {
                     if ($event.which === 1) {
-                        scope.selectedItem = item.description;
-                        scope.bind = item;
-                        
-                        clearItemsFiltered();
-
-                        scope.itemSelected = true;
-                        scope.isDropDownOpened = false;
-
-                        if (scope.change != undefined) {
-                            scope.change();
-                        };
-                    }
+                        doItemHasBeenSelected(item);
+                    };
                 };
 
                 scope.toogleDropdown = function () {
@@ -113,7 +121,7 @@
 
                     if (scope.isDropDownOpened) {
                         scope.itemSelected = false;
-                    }
+                    };
                 };
 
                 scope.openDropdown = function () {
@@ -126,18 +134,21 @@
                         var mustCleanFilter = true;
 
                         if (scope.selectedItem !== undefined) {
-                            var enteredDescription = scope.selectedItem.toLowerCase();
 
-                            if (scope.selectedItem !== undefined) {
-                                var selectedDescription = scope.bind.description.toLowerCase();
+                            if (scope.selected.description != "") {
+                                var enteredDescription = scope.selectedItem.toLowerCase();
+                                var selectedDescription = scope.selected.description.toLowerCase();
 
                                 mustCleanFilter = (selectedDescription != enteredDescription);
                             };
                         };
 
                         if (mustCleanFilter) {
+                            scope.selected = new SelectOption();
                             scope.selectedItem = "";
+
                             clearItemsFiltered();
+                            executeCallback();
                         };
 
                         scope.isDropDownOpened = false;
@@ -145,6 +156,7 @@
                 };
 
                 scope.filter = function () {
+                    scope.selected = new SelectOption();
                     var enteredDescription = scope.selectedItem.toLowerCase();
 
                     for (var i = 0; i < scope.items.length; i++) {
@@ -153,7 +165,7 @@
                         var itemHasMatched = (currentItemDescription.includes(enteredDescription));
 
                         currentItem.filtered = !itemHasMatched;
-                    }
+                    };
                 };
             }
         };

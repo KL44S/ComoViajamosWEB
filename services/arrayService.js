@@ -57,7 +57,7 @@
                 i++;
             };
 
-            return matchedElements;
+            return matchedElement;
         };
 
         return arrayService;

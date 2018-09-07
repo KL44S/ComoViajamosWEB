@@ -3,7 +3,8 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService) {
+        "reviewService",
+        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -26,12 +27,6 @@
             function init() {
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
-
-                    /*reviewService.getReviewFeelings().then(function (feelings) {
-                        $scope.feelings = feelings;
-
-                        $scope.hasThePageBeenLoaded = false;
-                    });*/
                 });
             }
 
@@ -48,41 +43,83 @@
                 $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
             };
 
-            $scope.selectedTransport = new SelectOption();
-            $scope.selectedBranch = new SelectOption();
-            $scope.selectedOrientation = new SelectOption();
-            $scope.selectedFeeling = new SelectOption();
+            $scope.selectedTransport = "";
+            $scope.selectedBranch = "";
+            $scope.selectedOrientation = "";
+            $scope.selectedFeeling = "";
+            $scope.selectedReason = "";
+            $scope.selectedTransportType = undefined;
 
             $scope.transportTypeHasBeenSelected = function (transportTypeId) {
-                transportService.getTransports(transportTypeId).then(function (transports) {
-                    $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
-                });
+                if ($scope.selectedTransportType != transportTypeId) {
+                    $scope.selectedTransportType = transportTypeId;
+
+                    transportService.getTransports(transportTypeId).then(function (transports) {
+                        $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
+
+                        $scope.branches = [];
+                        $scope.orientations = [];
+
+                        $scope.selectedTransport = "";
+                        $scope.selectedBranch = "";
+                        $scope.selectedOrientation = "";
+                    });
+                };
             };
 
-            $scope.transportHasBeenSelected = function () {
-                var transportId = $scope.selectedTransport.value;
-                console.log($scope.selectedTransport);
+            $scope.transportHasBeenSelected = function (selectedItem) {
+                var transportId = selectedItem.value;
 
-                transportService.getTransportBranches(transportId).then(function (branches) {
-                    $scope.branches = customSelectService.GetCustomSelectArrayOptions(branches, "branchId", "description");
-                });
+                if (transportId !== null) {
+                    transportService.getTransportBranches(transportId).then(function (branches) {
+                        $scope.modelBranches = branches;
+                        $scope.branches = customSelectService.GetCustomSelectArrayOptions(branches, "branchId", "description");
+                    });
+                }
+                else {
+                    $scope.branches = [];
+                };
+
+                $scope.orientations = [];
+
+                $scope.selectedBranch = "";
+                $scope.selectedOrientation = "";
             };
 
-            $scope.branchHasBeenSelected = function () {
-                var branchId = $scope.selectedBranch.value;
-                var arrayFilters = [
-                    new ArrayFilter("branchId", branchId)
-                ];
+            $scope.branchHasBeenSelected = function (selectedItem) {
+                var branchId = selectedItem.value;
 
-                var branch = arrayService.getFirstArrayElementByFilters($scope.branches, arrayFilters);
+                if (branchId !== null) {
+                    var arrayFilters = [
+                        new ArrayFilter("branchId", branchId)
+                    ];
 
-                $scope.orientations = branch.orientations;
+                    var branch = arrayService.getFirstArrayElementByFilters($scope.modelBranches, arrayFilters);
+
+                    $scope.orientations = customSelectService.GetCustomSelectArrayOptions(branch.orientations, "orientationId", "description");
+                }
+                else {
+                    $scope.orientations = [];
+                };
+
+                $scope.selectedOrientation = "";
             };
 
-            $scope.feelingHasBeenSelected = function () {
-                var feelingId = $scope.selectedFeeling.value;
+            $scope.orientationHasBeenSelected = function (selectedItem) {
+                if (selectedItem.value !== null) {
+                    reviewService.getReviewFeelings().then(function (feelings) {
+                        $scope.feelings = customSelectService.GetCustomSelectArrayOptions(feelings, "feelingId", "description");
+                    });
+                }
+                else {
+                    $scope.feelings = [];
+                };
+            };
 
-                reviewService.getReviewFeelingReasons(feelingId).then(function (reasons) {
+            $scope.feelingHasBeenSelected = function (selectedItem) {
+                var feelingId = selectedItem.value;
+
+                reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
                     $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
                 });
             };
