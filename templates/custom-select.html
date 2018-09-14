@@ -1,4 +1,4 @@
-﻿<div class="select-select" ng-class="{open: isDropDownOpened}">
+﻿<div class="select-select" ng-class="{open: isDropDownOpened, disabled: areNotThereItems}">
     <i ng-mousedown="toogleDropdown();" class="icon-dropdown"></i>
     <input ng-click="openDropdown();" ng-blur="onBlur();" type="text" ng-keyup="filter();" ng-model="selectedItem" placeholder="Buscar...">
 </div>

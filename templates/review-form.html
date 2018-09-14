@@ -10,8 +10,8 @@
                     <label class="label-form">CONTANOS EN QUÉ VIAJASTE<span class="required"></span></label>
 
                     <div class="subform-block">
-                        <label ng-repeat="transportType in transportTypes" style>
-                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group">
+                        <label ng-repeat="transportType in transportTypes">
+                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group" checked>
                             <label class="label-input" for="{{transportType.description}}" ng-click="transportTypeHasBeenSelected(transportType.transportTypeId);">{{transportType.description}}</label>
                         </label>
                     </div>
