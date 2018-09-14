@@ -49,6 +49,12 @@
                             var onlyItem = scope.items[0];
 
                             doItemHasBeenSelected(onlyItem);
+                        }
+                        else if (scope.areNotThereItems) {
+                            scope.selectedItem = "";
+                            scope.selected = undefined;
+
+                            executeCallback();
                         };
                     };
 
