@@ -29,7 +29,7 @@ popup-body {
 }
 
 .popup-content-show {
-    animation: slide-in 0.2s cubic-bezier(.36,.07,.19,.97) both;
+    animation: slide-in 0.3s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 .popup-content-hide {
@@ -39,7 +39,7 @@ popup-body {
 .popup-close {
     float: right;
     color: black;
-    font-size: 20px;
+    font-size: 19px;
     opacity: 0.9;
     transition: opacity 0.2s;
     margin-top: 5px;
@@ -63,15 +63,17 @@ popup-header {
 
 @media (min-width : 480px) {
     .popup-content-sm {
-        width: 30%;
+        width: 40%;
     }
 
     .popup-content-md {
         width: 60%;
     }
+}
 
-    .popup-content-lg {
-        width: 90%;
+@media (min-width : 1000px) {
+    .popup-content-sm {
+        width: 30%;
     }
 }
 

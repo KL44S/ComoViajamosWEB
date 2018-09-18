@@ -4,13 +4,27 @@
 }
 
 .moment-picker {
-    font-size: 12px !important;
+    font-size: 11px !important;
+}
+
+.moment-picker-container {
+    border: 2px solid black !important;
+    border-radius: 2px !important;
+}
+
+.moment-picker-container th,
+.moment-picker-container td,
+.moment-picker-container th,
+.moment-picker-container td {
+    height: 15px !important;
+    line-height: 15px !important;
+    padding: 5px !important;
 }
 
 .highlighted.selected {
     background: none !important;
-    background-color: #ee7c7f !important;
-    color: #FCFFFF !important;
+    background-color: #353535 !important;
+    color: white !important;
 }
 
 .highlighted {

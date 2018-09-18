@@ -3,16 +3,17 @@
     <popup-header></popup-header>
     <popup-body>
         <div class="review-main">
-            <h1 class="review-title">CONTANOS COMO VIAJASTE</h1>
+            <h1 class="review-title">Cómo Viajaste</h1>
+            <hr />
 
             <form>
                 <div class="form-block">
                     <label class="label-form">CONTANOS EN QUÉ VIAJASTE<span class="required"></span></label>
 
-                    <div class="subform-block">
+                    <div class="subform-block radio-block">
                         <label ng-repeat="transportType in transportTypes">
-                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group" checked>
-                            <label class="label-input" for="{{transportType.description}}" ng-click="transportTypeHasBeenSelected(transportType.transportTypeId);">{{transportType.description}}</label>
+                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group" ng-class="{'checked': transportType.selected}">
+                            <label class="label-input" for="{{transportType.description}}" ng-click="transportTypeHasBeenSelected(transportType);">{{transportType.description}}</label>
                         </label>
                     </div>
 
@@ -36,6 +37,8 @@
 
                 </div>
 
+                <hr />
+
                 <div class="form-block">
                     <label class="label-form">¿EN QUÉ FRANJA HORARIA (APROX) VIAJASTE?<span class="required"></span></label>
 
@@ -52,6 +55,8 @@
                     </div>
 
                 </div>
+
+                <hr />
 
                 <div class="form-block">
                     <div class="subform-block">
@@ -69,8 +74,10 @@
                     </div>
                 </div>
 
+                <hr />
+
                 <div class="form-block">
-                    <button class="review-submit-btn">LISTO</button>
+                    <button class="review-submit-btn" ng-class="{'disabled': formIsValid}">LISTO</button>
                 </div>
             </form>
         </div>
@@ -78,98 +85,3 @@
     </popup-body>
 
 </div>
-
-<!--<div class="review">
-    <div  class="review-main">
-
-        <div class="review-tab">
-            <div class="review-tab-container" ng-click="toogleForm();">
-                <label class="review-tab-text">¿CÓMO VIAJASTE?</label>
-            </div>
-        </div>
-
-
-        <div class="review-form">
-         <div class="form">
-            <h1 class="review-title">CONTANOS COMO VIAJASTE</h1>
-
-            <form>
-                <div class="form-block">
-                    <label class="label-form">CONTANOS EN QUÉ VIAJASTE<span class="required"></span></label>
-
-                    <div class="subform-block">
-                        <label ng-repeat="transportType in transportTypes" style>
-                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group">
-                            <label class="label-input" for="{{transportType.description}}" ng-click="transportTypeHasBeenSelected(transportType.transportTypeId);">{{transportType.description}}</label>
-                        </label>
-                    </div>
-
-                    <div class="subform-block">
-
-                        <label class="label-input">Línea<span class="required"></span></label>
-                        <div class="custom-select">
-                            <custom-select items="transports" selected="selectedElement"></custom-select>
-                        </div>
-
-                        <label class="label-input">Ramal<span class="required"></span></label>
-                        <div class="custom-select">
-                            <custom-select items="transports" selected="selectedElement"></custom-select>
-                        </div>
-
-                        <label class="label-input">Orientación<span class="required"></span></label>
-                        <div class="custom-select">
-                            <custom-select items="transports" selected="selectedElement"></custom-select>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="form-block">
-                    <label class="label-form">¿EN QUÉ FRANJA HORARIA (APROX) VIAJASTE?<span class="required"></span></label>
-
-                    <div class="subform-block">
-                        <label class="label-input">Desde<span class="required"></span></label>
-                        <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
-                    </div>
-
-                    <div class="subform-block">
-                        <label class="label-input">Hasta<span class="required"></span></label>
-                        <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
-                    </div>
-
-                </div>
-
-                <div class="form-block">
-                    <div class="subform-block">
-                        <label class="label-form">¿CÓMO VIAJASTE?<span class="required"></span></label>
-                        <select>
-                            <option ng-repeat="feeling in feelings" value="{{feeling.feelingId}}">{{feeling.description}}</option>
-                        </select>
-                    </div>
-
-                    <div class="subform-block">
-                        <label class="label-form">CONTANOS POR QUÉ<span class="required"></span></label>
-                        <select>
-                            <option ng-repeat="feelingReason in feelingReasons" value="{{feelingReason.feelingReasonId}}">{{feelingReason.description}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-block">
-                    <label class="label-form">(OPCIONAL) ALGUN COMENTARIO QUE QUIERAS HACER</label>
-                    <textarea rows="2" cols="40"></textarea>
-                </div>
-
-                <div class="form-block">
-                    <button class="review-submit-btn">LISTO</button>
-                </div>
-
-
-            </form>
-        </div>
-
-        </div>
-    </div>
-</div>-->

@@ -50,7 +50,19 @@
             $scope.selectedReason = "";
             $scope.selectedTransportType = undefined;
 
-            $scope.transportTypeHasBeenSelected = function (transportTypeId) {
+            $scope.transportTypeHasBeenSelected = function (transportType) {
+                var transportTypesNumber = $scope.transportTypes.length;
+
+                for (var i = 0; i < transportTypesNumber; i++) {
+                    var currentTransportType = $scope.transportTypes[i];
+
+                    currentTransportType.selected = false;
+                };
+
+                transportType.selected = true;
+
+                var transportTypeId = transportType.transportTypeId;
+
                 if ($scope.selectedTransportType != transportTypeId) {
                     $scope.selectedTransportType = transportTypeId;
 

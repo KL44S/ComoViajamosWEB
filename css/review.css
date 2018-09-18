@@ -2,6 +2,7 @@
     background-color: white; /* Used if the image is unavailable */
     width: 100%;
     padding: 10px;
+    overflow: auto;
 }
 
 .review-main {
@@ -11,13 +12,15 @@
 }
 
 .review-title {
-    font-size: 20px;
+    font-size: 35px;
     color: black;
     opacity: 0.9;
-    font-weight: bold;
+    font-weight: 900;
     letter-spacing: 2px;
     text-align: center;
     margin-bottom: 25px;
+    margin-top: 10px;
+    font-family: 'Merienda', cursive;
 }
 
 .form-block {
@@ -26,9 +29,23 @@
     margin-bottom: 25px;
 }
 
+.form-block > div,
+.subform-block > div {
+    margin-top: 8px;
+}
+
+.form-block > div,
+.subform-block > div {
+    margin-bottom: 15px;
+}
+
 .subform-block,
 .form-block {
     display: block;
+}
+
+.radio-block {
+    margin-top: 15px !important;
 }
 
 .label-form {
@@ -36,19 +53,21 @@
     font-size: 12px;
     font-weight: 700;
     display: block;
+    margin-top: 25px;
 }
 
 .label-input {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .form-input {
-    border: none;
+    border: 2px solid black;
     border-radius: 1px;
     outline: none;
     padding: 10px;
     font-size: 12px;
+    margin-bottom: 1px;
 }
 
 .form-input::-webkit-input-placeholder {
@@ -71,34 +90,49 @@
     font-size: 12px;
 }
 
+.moment-picker {
+    z-index: 90999999 !important;
+}
+
 .review-submit-btn {
-    padding: 15px;
+    padding: 13px;
     width: 206px;
     border-style: solid;
     border-width: 2px;
-    border-color: transparent;
+    border-color: #151515;
     border-radius: 50px;
-    background-color: #DCD976;
-    color: black;
+    background-color: #151515;
+    color: white;
     transition: all 0.2s, background-color 0.2s;
     outline: 0;
+    font-weight: 600;
+}
+
+.review-submit-btn disabled,
+.review-submit-btn disabled:hover {
+    border-color: #F4F4F4;
+    background-color: #F4F4F4;
+    color: #DCDCDC;
+}
+
+.review-submit-btn disabled:hover {
+    cursor: not-allowed;
 }
 
 .review-submit-btn:hover {
-    background-color: black;
-    color: white;
-    border-color: black;
+    background-color: white;
+    color: #151515;
+    border-color: #151515;
     cursor: pointer;
 }
 
-[type="radio"]:checked,
-[type="radio"]:not(:checked) {
+[type="radio"] {
     position: absolute;
     left: -9999px;
 }
 
-[type="radio"]:checked + label,
-[type="radio"]:not(:checked) + label {
+[type="radio"] + label,
+[type="radio"] + label {
     position: relative;
     padding-left: 25px;
     cursor: pointer;
@@ -108,8 +142,8 @@
     color: black;
 }
 
-[type="radio"]:checked + label:before,
-[type="radio"]:not(:checked) + label:before {
+[type="radio"] + label:before,
+[type="radio"] + label:before {
     content: '';
     position: absolute;
     left: 0;
@@ -121,8 +155,8 @@
     background: white;
 }
 
-[type="radio"]:checked + label:after,
-[type="radio"]:not(:checked) + label:after {
+[type="radio"] + label:after,
+[type="radio"] + label:after {
     content: '';
     width: 12px;
     height: 12px;
@@ -132,16 +166,16 @@
     border-radius: 100%;
     -webkit-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    background: black;
+    background: #393939;
 }
 
-[type="radio"]:not(:checked) + label:after {
+[type="radio"] + label:after {
     opacity: 0;
     -webkit-transform: scale(0);
     transform: scale(0);
 }
 
-[type="radio"]:checked + label:after {
+[type="radio"].checked + label:after {
     opacity: 1;
     -webkit-transform: scale(1);
     transform: scale(1);
@@ -189,5 +223,12 @@
     .form {
         margin-top: 50px;
         width: 100%;
+    }
+}
+
+@media (max-width : 1300px) {
+    .label-input {
+        display: block;
+        margin-bottom: 7px;
     }
 }
