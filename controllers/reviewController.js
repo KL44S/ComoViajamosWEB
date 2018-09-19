@@ -3,8 +3,8 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService",
-        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService) {
+        "reviewService", "spinnerService",
+        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -27,10 +27,15 @@
             function init() {
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
+
+                    spinnerService.hideSpinner($scope.containerId);
                 });
             }
 
             //público
+            $scope.containerId = "reviewContainer";
+
+            spinnerService.showSpinner($scope.containerId);
             initDates();
 
             $scope.reviewForm = {
