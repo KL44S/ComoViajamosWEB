@@ -23,7 +23,7 @@
                 };
 
                 function executeCallback() {
-                    if (scope.change != undefined) {
+                    if (scope.change !== undefined) {
                         scope.change({ selectedItem: scope.selected });
                     };
                 };
@@ -53,8 +53,6 @@
                         else if (scope.areNotThereItems) {
                             scope.selectedItem = "";
                             scope.selected = undefined;
-
-                            executeCallback();
                         };
                     };
 

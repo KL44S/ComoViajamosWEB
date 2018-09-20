@@ -85,9 +85,10 @@
             };
 
             $scope.transportHasBeenSelected = function (selectedItem) {
-                var transportId = selectedItem.value;
 
-                if (transportId !== null) {
+                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                    var transportId = selectedItem.value;
+
                     transportService.getTransportBranches(transportId).then(function (branches) {
                         $scope.modelBranches = branches;
                         $scope.branches = customSelectService.GetCustomSelectArrayOptions(branches, "branchId", "description");
@@ -104,9 +105,9 @@
             };
 
             $scope.branchHasBeenSelected = function (selectedItem) {
-                var branchId = selectedItem.value;
+                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                    var branchId = selectedItem.value;
 
-                if (branchId !== null) {
                     var arrayFilters = [
                         new ArrayFilter("branchId", branchId)
                     ];
@@ -123,22 +124,30 @@
             };
 
             $scope.orientationHasBeenSelected = function (selectedItem) {
-                if (selectedItem.value !== null) {
+                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
                     reviewService.getReviewFeelings().then(function (feelings) {
                         $scope.feelings = customSelectService.GetCustomSelectArrayOptions(feelings, "feelingId", "description");
                     });
                 }
                 else {
                     $scope.feelings = [];
+                    $scope.reasons = [];
                 };
             };
 
             $scope.feelingHasBeenSelected = function (selectedItem) {
-                var feelingId = selectedItem.value;
+                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                    var feelingId = selectedItem.value;
 
-                reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
-                    $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
-                });
+                    reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
+                        $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
+                    });
+                }
+                else {
+                    $scope.feelings = [];
+                    $scope.reasons = [];
+                };
+
             };
 
             $scope.saveReview = function () {
