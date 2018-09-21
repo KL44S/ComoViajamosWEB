@@ -21,17 +21,17 @@
 
                         <label class="label-input">Línea<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="transports" selected="selectedTransport" change="transportHasBeenSelected(selectedItem);"></custom-select>
+                            <custom-select items="transports" selected="selectedTransport.description" change="transportHasBeenSelected(selectedItem);"></custom-select>
                         </div>
 
                         <label class="label-input">Ramal<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="branches" selected="selectedBranch" change="branchHasBeenSelected(selectedItem);"></custom-select>
+                            <custom-select items="branches" selected="selectedBranch.description" change="branchHasBeenSelected(selectedItem);"></custom-select>
                         </div>
 
                         <label class="label-input">Orientación<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="orientations" selected="selectedOrientation" change="orientationHasBeenSelected(selectedItem);"></custom-select>
+                            <custom-select items="orientations" selected="selectedOrientation.description" change="orientationHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
 
@@ -44,14 +44,14 @@
 
                     <div class="subform-block">
                         <label class="label-input">Desde<span class="required"></span></label>
-                        <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
+                        <input class="form-input"  value="{{dateTimeFrom}}" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateFrom" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                        <input class="form-input" value="{{dateTimeFrom}}" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
                     </div>
 
                     <div class="subform-block">
                         <label class="label-input">Hasta<span class="required"></span></label>
-                        <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="date" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
+                        <input class="form-input" value="{{dateTimeUntil}}" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateUntil" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                        <input class="form-input"  value="{{dateTimeUntil}}" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
                     </div>
 
                 </div>
@@ -62,14 +62,14 @@
                     <div class="subform-block">
                         <label class="label-form">¿CÓMO VIAJASTE?<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="feelings" selected="selectedFeeling" change="feelingHasBeenSelected(selectedItem);"></custom-select>
+                            <custom-select items="feelings" selected="selectedFeeling.description" change="feelingHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
 
                     <div class="subform-block">
                         <label class="label-form">CONTANOS POR QUÉ<span class="required"></span></label>
                         <div class="custom-select">
-                            <custom-select items="reasons" selected="selectedReason"></custom-select>
+                            <custom-select items="reasons" selected="selectedReason.description" change="reasonHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
                 </div>

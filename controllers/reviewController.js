@@ -13,15 +13,22 @@
                 return momentDate;
             }
 
+            function mapSelectedOption(entity, selectedOption) {
+                if (selectedOption !== undefined) {
+                    entity.id = selectedOption.value;
+                    entity.description = selectedOption.description;
+                };            
+            };
+
             function initDates() {
-                var dateFrom = moment();
+                var dateFrom = moment(new Date());
                 dateFrom = getFormattedDate(dateFrom);
                 dateFrom = dateFrom.minutes(dateFrom.minutes() - reviewConstants.minutesBetweeness);
-                $scope.dateTimeFrom = dateFrom;
+                //$scope.dateTimeFrom = dateFrom;
 
-                var dateUntil = moment();
+                var dateUntil = moment(new Date());
                 dateUntil = getFormattedDate(dateUntil);
-                $scope.dateTimeUntil = dateUntil;
+                //$scope.dateTimeUntil = dateUntil;
             }
 
             function init() {
@@ -48,11 +55,11 @@
                 $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
             };
 
-            $scope.selectedTransport = "";
-            $scope.selectedBranch = "";
-            $scope.selectedOrientation = "";
-            $scope.selectedFeeling = "";
-            $scope.selectedReason = "";
+            $scope.selectedTransport = new ReviewTransport();
+            $scope.selectedBranch = new ReviewTransportBranch();
+            $scope.selectedOrientation = new ReviewTransportBranchOrientation();
+            $scope.selectedFeeling = new ReviewFeeling();
+            $scope.selectedReason = new ReviewFeelingReason();
             $scope.selectedTransportType = undefined;
 
             $scope.transportTypeHasBeenSelected = function (transportType) {
@@ -74,17 +81,14 @@
                     transportService.getTransports(transportTypeId).then(function (transports) {
                         $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
 
-                        $scope.branches = [];
-                        $scope.orientations = [];
-
-                        $scope.selectedTransport = "";
-                        $scope.selectedBranch = "";
-                        $scope.selectedOrientation = "";
+                        $scope.transportHasBeenSelected();
                     });
                 };
             };
 
             $scope.transportHasBeenSelected = function (selectedItem) {
+
+                mapSelectedOption($scope.selectedTransport, selectedItem);
 
                 if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
                     var transportId = selectedItem.value;
@@ -98,13 +102,12 @@
                     $scope.branches = [];
                 };
 
-                $scope.orientations = [];
-
-                $scope.selectedBranch = "";
-                $scope.selectedOrientation = "";
+                $scope.branchHasBeenSelected();
             };
 
             $scope.branchHasBeenSelected = function (selectedItem) {
+                mapSelectedOption($scope.selectedBranch, selectedItem);
+
                 if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
                     var branchId = selectedItem.value;
 
@@ -120,34 +123,41 @@
                     $scope.orientations = [];
                 };
 
-                $scope.selectedOrientation = "";
+                $scope.orientationHasBeenSelected();
             };
 
             $scope.orientationHasBeenSelected = function (selectedItem) {
+                mapSelectedOption($scope.selectedOrientation, selectedItem);
+
                 if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
                     reviewService.getReviewFeelings().then(function (feelings) {
                         $scope.feelings = customSelectService.GetCustomSelectArrayOptions(feelings, "feelingId", "description");
                     });
-                }
-                else {
-                    $scope.feelings = [];
-                    $scope.reasons = [];
                 };
             };
 
+            $scope.reasonHasBeenSelected = function (selectedItem) {
+                mapSelectedOption($scope.selectedReason, selectedItem);
+            };
+
             $scope.feelingHasBeenSelected = function (selectedItem) {
+                mapSelectedOption($scope.selectedFeeling, selectedItem);
+
                 if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
                     var feelingId = selectedItem.value;
 
                     reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
                         $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
+
+                        if (reasons.length === 0) {
+                            $scope.reasonHasBeenSelected();
+                        };
                     });
                 }
                 else {
-                    $scope.feelings = [];
                     $scope.reasons = [];
+                    $scope.reasonHasBeenSelected();
                 };
-
             };
 
             $scope.saveReview = function () {
