@@ -44,14 +44,14 @@
 
                     <div class="subform-block">
                         <label class="label-input">Desde<span class="required"></span></label>
-                        <input class="form-input"  value="{{dateTimeFrom}}" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateFrom" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" value="{{dateTimeFrom}}" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
+                        <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateFrom" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                        <input class="form-input" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
                     </div>
 
                     <div class="subform-block">
                         <label class="label-input">Hasta<span class="required"></span></label>
-                        <input class="form-input" value="{{dateTimeUntil}}" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateUntil" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input"  value="{{dateTimeUntil}}" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
+                        <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateUntil" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
+                        <input class="form-input" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
                     </div>
 
                 </div>

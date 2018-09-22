@@ -65,7 +65,10 @@
     border: 2px solid black;
     border-radius: 1px;
     outline: none;
+    padding-left: 10px;
     padding: 10px;
+    padding-bottom: 12px;
+    padding-top: 12px;
     font-size: 12px;
     margin-bottom: 1px;
 }
