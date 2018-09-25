@@ -11,7 +11,7 @@
                 momentDate = momentDate.minutes(Math.round(momentDate.minutes() / reviewConstants.minutesRound) * reviewConstants.minutesRound);
 
                 return momentDate;
-            }
+            };
 
             function mapSelectedOption(entity, selectedOption) {
                 if (selectedOption !== undefined) {
@@ -20,16 +20,257 @@
                 };            
             };
 
-            function initDates() {
-                var dateFrom = moment(new Date());
-                dateFrom = getFormattedDate(dateFrom);
-                dateFrom = dateFrom.minutes(dateFrom.minutes() - reviewConstants.minutesBetweeness);
-                //$scope.dateTimeFrom = dateFrom;
+            function addZeroIfItIsNecessary(number) {
+                var numberAsString = number.toString();
 
-                var dateUntil = moment(new Date());
-                dateUntil = getFormattedDate(dateUntil);
-                //$scope.dateTimeUntil = dateUntil;
-            }
+                if (numberAsString.length === 1) {
+                    numberAsString = "0" + numberAsString;
+                };
+
+                return numberAsString;
+            };
+
+            function formatJsDate(date) {
+                var separator = "-";
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+
+                var formattedDay = addZeroIfItIsNecessary(day);
+                var formattedMonth = addZeroIfItIsNecessary(month);
+
+                var formattedDate = formattedDay + separator + formattedMonth + separator + year;
+
+                return formattedDate;
+            };
+
+            function formatJsTime(time) {
+                var separator = ":";
+                var hours = time.getHours();
+                var minutes = time.getMinutes();
+
+                var formattedHours = addZeroIfItIsNecessary(hours);
+                var formattedMinutes = addZeroIfItIsNecessary(minutes);
+
+                var formattedTime = formattedHours + separator + formattedMinutes;
+
+                return formattedTime;
+            };
+
+            function getFromTime(now) {
+                now.setMinutes(now.getMinutes() - 30);
+
+                return formatJsTime(now);
+            };
+
+            function initDates() {
+                //fechas
+                var dateFormat = 'd-m-Y';
+                var timeFormat = "H:i";
+                var today = 'today';
+
+                var dateFromInstance;
+                var dateUntilInstance;
+                var timeFromInstance;
+                var timeUntilInstance;
+
+                var now = new Date();
+                var formattedToday = formatJsDate(now);
+
+
+                $scope.dateFrom = formattedToday;
+                $scope.dateUntil = formattedToday;
+                $scope.timeUntil = formatJsTime(now);
+                $scope.timeFrom = getFromTime(now);
+
+                $scope.dateFromOptions = {
+                    dateFormat: dateFormat,
+                    defaultDate: today,
+                    maxDate: today,
+                    onChange: function (selectedDates, dateStr, instance) {
+                        dateUntilInstance.set("minDate", instance.parseDate(dateStr, dateFormat));
+                    },
+                    onReady: function (selectedDates, dateStr, instance) {
+                        dateFromInstance = instance;
+                    }
+                };
+
+                $scope.dateUntilOptions = {
+                    dateFormat: dateFormat,
+                    defaultDate: today,
+                    minDate: today,
+                    onChange: function (selectedDates, dateStr, instance) {
+                        dateFromInstance.set("maxDate", instance.parseDate(dateStr, dateFormat));
+                    },
+                    onReady: function (selectedDates, dateStr, instance) {
+                        dateUntilInstance = instance;
+                    }
+                };
+
+                $scope.timeFromOptions = {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: timeFormat,
+                    maxDate: today,
+                    time_24hr: true,
+                    onChange: function (selectedDates, dateStr, instance) {
+                        timeUntilInstance.set("minDate", instance.parseDate(dateStr, dateFormat));
+                    },
+                    onReady: function (selectedDates, dateStr, instance) {
+                        timeFromInstance = instance;
+                    }
+                };
+
+                $scope.timeUntilOptions = {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: timeFormat,
+                    minDate: $scope.timeFrom,
+                    time_24hr: true,
+                    onChange: function (selectedDates, dateStr, instance) {
+                        timeFromInstance.set("maxDate", instance.parseDate(dateStr, dateFormat));
+                    },
+                    onReady: function (selectedDates, dateStr, instance) {
+                        timeUntilInstance = instance;
+                    }
+                };
+
+                $scope.datePostSetup = function (fpItem) {
+                    //console.log('flatpickr', fpItem);
+                };
+            };
+
+            function initReviewForm() {
+                $scope.reviewForm = {
+                    isReviewFormClosed: true,
+                    openSidebarIcon: "icon-menu",
+                    closeSidebarIcon: "icon-close"
+                };
+
+                $scope.toogleForm = function () {
+                    $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
+                };
+
+                $scope.selectedTransport = new ReviewTransport();
+                $scope.selectedBranch = new ReviewTransportBranch();
+                $scope.selectedOrientation = new ReviewTransportBranchOrientation();
+                $scope.selectedFeeling = new ReviewFeeling();
+                $scope.selectedReason = new ReviewFeelingReason();
+                $scope.selectedTransportType = undefined;
+
+                $scope.transportTypeHasBeenSelected = function (transportType) {
+                    var transportTypesNumber = $scope.transportTypes.length;
+
+                    for (var i = 0; i < transportTypesNumber; i++) {
+                        var currentTransportType = $scope.transportTypes[i];
+
+                        currentTransportType.selected = false;
+                    };
+
+                    transportType.selected = true;
+
+                    var transportTypeId = transportType.transportTypeId;
+
+                    if ($scope.selectedTransportType != transportTypeId) {
+                        $scope.selectedTransportType = transportTypeId;
+
+                        transportService.getTransports(transportTypeId).then(function (transports) {
+                            $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
+
+                            $scope.transportHasBeenSelected();
+                        });
+                    };
+                };
+
+                $scope.transportHasBeenSelected = function (selectedItem) {
+
+                    mapSelectedOption($scope.selectedTransport, selectedItem);
+
+                    if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        var transportId = selectedItem.value;
+
+                        transportService.getTransportBranches(transportId).then(function (branches) {
+                            $scope.modelBranches = branches;
+                            $scope.branches = customSelectService.GetCustomSelectArrayOptions(branches, "branchId", "description");
+                        });
+                    }
+                    else {
+                        $scope.branches = [];
+                    };
+
+                    $scope.branchHasBeenSelected();
+                };
+
+                $scope.branchHasBeenSelected = function (selectedItem) {
+                    mapSelectedOption($scope.selectedBranch, selectedItem);
+
+                    if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        var branchId = selectedItem.value;
+
+                        var arrayFilters = [
+                            new ArrayFilter("branchId", branchId)
+                        ];
+
+                        var branch = arrayService.getFirstArrayElementByFilters($scope.modelBranches, arrayFilters);
+
+                        $scope.orientations = customSelectService.GetCustomSelectArrayOptions(branch.orientations, "orientationId", "description");
+                    }
+                    else {
+                        $scope.orientations = [];
+                    };
+
+                    $scope.orientationHasBeenSelected();
+                };
+
+                $scope.orientationHasBeenSelected = function (selectedItem) {
+                    mapSelectedOption($scope.selectedOrientation, selectedItem);
+
+                    if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        reviewService.getReviewFeelings().then(function (feelings) {
+                            $scope.feelings = customSelectService.GetCustomSelectArrayOptions(feelings, "feelingId", "description");
+                        });
+                    };
+                };
+
+                $scope.reasonHasBeenSelected = function (selectedItem) {
+                    mapSelectedOption($scope.selectedReason, selectedItem);
+                };
+
+                $scope.feelingHasBeenSelected = function (selectedItem) {
+                    mapSelectedOption($scope.selectedFeeling, selectedItem);
+
+                    if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        var feelingId = selectedItem.value;
+
+                        reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
+                            $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
+
+                            if (reasons.length === 0) {
+                                $scope.reasonHasBeenSelected();
+                            };
+                        });
+                    }
+                    else {
+                        $scope.reasons = [];
+                        $scope.reasonHasBeenSelected();
+                    };
+                };
+
+                $scope.saveReview = function () {
+                    var review = {
+
+                    };
+
+                    reviewService.saveReview(review).then(function (reasons) {
+                        $scope.dismissPopup();
+                    });
+                };
+            };
+
+            function initSpinner() {
+                $scope.containerId = "reviewContainer";
+                spinnerService.showSpinner($scope.containerId);
+            };
 
             function init() {
                 transportService.getTransportTypes().then(function (transportTypes) {
@@ -37,138 +278,12 @@
 
                     spinnerService.hideSpinner($scope.containerId);
                 });
-            }
+            };
 
             //público
-            $scope.containerId = "reviewContainer";
-
-            spinnerService.showSpinner($scope.containerId);
+            initSpinner();
             initDates();
-
-            $scope.reviewForm = {
-                isReviewFormClosed: true,
-                openSidebarIcon: "icon-menu",
-                closeSidebarIcon: "icon-close"
-            };
-
-            $scope.toogleForm = function () {
-                $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
-            };
-
-            $scope.selectedTransport = new ReviewTransport();
-            $scope.selectedBranch = new ReviewTransportBranch();
-            $scope.selectedOrientation = new ReviewTransportBranchOrientation();
-            $scope.selectedFeeling = new ReviewFeeling();
-            $scope.selectedReason = new ReviewFeelingReason();
-            $scope.selectedTransportType = undefined;
-
-            $scope.transportTypeHasBeenSelected = function (transportType) {
-                var transportTypesNumber = $scope.transportTypes.length;
-
-                for (var i = 0; i < transportTypesNumber; i++) {
-                    var currentTransportType = $scope.transportTypes[i];
-
-                    currentTransportType.selected = false;
-                };
-
-                transportType.selected = true;
-
-                var transportTypeId = transportType.transportTypeId;
-
-                if ($scope.selectedTransportType != transportTypeId) {
-                    $scope.selectedTransportType = transportTypeId;
-
-                    transportService.getTransports(transportTypeId).then(function (transports) {
-                        $scope.transports = customSelectService.GetCustomSelectArrayOptions(transports, "transportId", "description");
-
-                        $scope.transportHasBeenSelected();
-                    });
-                };
-            };
-
-            $scope.transportHasBeenSelected = function (selectedItem) {
-
-                mapSelectedOption($scope.selectedTransport, selectedItem);
-
-                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
-                    var transportId = selectedItem.value;
-
-                    transportService.getTransportBranches(transportId).then(function (branches) {
-                        $scope.modelBranches = branches;
-                        $scope.branches = customSelectService.GetCustomSelectArrayOptions(branches, "branchId", "description");
-                    });
-                }
-                else {
-                    $scope.branches = [];
-                };
-
-                $scope.branchHasBeenSelected();
-            };
-
-            $scope.branchHasBeenSelected = function (selectedItem) {
-                mapSelectedOption($scope.selectedBranch, selectedItem);
-
-                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
-                    var branchId = selectedItem.value;
-
-                    var arrayFilters = [
-                        new ArrayFilter("branchId", branchId)
-                    ];
-
-                    var branch = arrayService.getFirstArrayElementByFilters($scope.modelBranches, arrayFilters);
-
-                    $scope.orientations = customSelectService.GetCustomSelectArrayOptions(branch.orientations, "orientationId", "description");
-                }
-                else {
-                    $scope.orientations = [];
-                };
-
-                $scope.orientationHasBeenSelected();
-            };
-
-            $scope.orientationHasBeenSelected = function (selectedItem) {
-                mapSelectedOption($scope.selectedOrientation, selectedItem);
-
-                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
-                    reviewService.getReviewFeelings().then(function (feelings) {
-                        $scope.feelings = customSelectService.GetCustomSelectArrayOptions(feelings, "feelingId", "description");
-                    });
-                };
-            };
-
-            $scope.reasonHasBeenSelected = function (selectedItem) {
-                mapSelectedOption($scope.selectedReason, selectedItem);
-            };
-
-            $scope.feelingHasBeenSelected = function (selectedItem) {
-                mapSelectedOption($scope.selectedFeeling, selectedItem);
-
-                if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
-                    var feelingId = selectedItem.value;
-
-                    reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
-                        $scope.reasons = customSelectService.GetCustomSelectArrayOptions(reasons, "reasonId", "description");
-
-                        if (reasons.length === 0) {
-                            $scope.reasonHasBeenSelected();
-                        };
-                    });
-                }
-                else {
-                    $scope.reasons = [];
-                    $scope.reasonHasBeenSelected();
-                };
-            };
-
-            $scope.saveReview = function () {
-                var review = {
-
-                };
-
-                reviewService.saveReview(review).then(function (reasons) {
-                    $scope.dismissPopup();
-                });
-            };
+            initReviewForm();
 
             angular.element(document).ready(function () {
                 init();

@@ -43,15 +43,15 @@
                     <label class="label-form">¿EN QUÉ FRANJA HORARIA (APROX) VIAJASTE?<span class="required"></span></label>
 
                     <div class="subform-block">
-                        <label class="label-input">Desde<span class="required"></span></label>
-                        <input class="form-input" max-date="dateTimeUntil" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateFrom" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" max-date="dateTimeUntil" ng-model="dateTimeFrom" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora desde" moment-picker="timeFrom" format="HH:mm" keyboard="true">
+                        <label class="label-input">Desde<span class="required"></span></label>               
+                        <input class="form-input" ng-flatpickr fp-opts="dateFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateFrom">
+                        <input class="form-input" ng-flatpickr fp-opts="timeFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeFrom">
                     </div>
 
                     <div class="subform-block">
                         <label class="label-input">Hasta<span class="required"></span></label>
-                        <input class="form-input" min-date="dateTimeFrom" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Fecha" moment-picker="dateUntil" locale="es" format="L" min-view="year" start-view="day" today="true" keyboard="true">
-                        <input class="form-input" min-date="dateTimeFrom" ng-model="dateTimeUntil" ng-model-options="{ updateOn: 'blur' }" placeholder="Hora hasta" moment-picker="timeUntil" format="HH:mm" keyboard="true">
+                        <input class="form-input" ng-flatpickr fp-opts="dateUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateUntil">
+                        <input class="form-input" ng-flatpickr fp-opts="timeUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeUntil">
                     </div>
 
                 </div>

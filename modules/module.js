@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var app = angular.module("CV", ['ngAnimate', 'moment-picker']);
+    var app = angular.module("CV", ['ngAnimate', 'angular-flatpickr']);
 
     app.config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorInterceptor');
