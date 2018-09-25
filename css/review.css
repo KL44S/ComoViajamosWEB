@@ -97,6 +97,11 @@
     z-index: 90999999 !important;
 }
 
+i.date,
+i.time {
+    margin-left: -35px;
+}
+
 .review-submit-btn {
     padding: 13px;
     width: 206px;
