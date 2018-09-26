@@ -64,6 +64,41 @@
             };
 
             function initDates() {
+                function areDatesEquals(dateFrom, dateUntil) {
+                    if (dateFrom === undefined) {
+                        dateFrom = $scope.dateFrom;
+                    };
+
+                    if (dateUntil === undefined) {
+                        dateUntil = $scope.dateUntil;
+                    };
+
+                    return (dateFrom == dateUntil);
+                };
+
+                function updateTimeUntil(dateFrom, dateUntil) {
+                    if (areDatesEquals(dateFrom, dateUntil)) {
+                        timeUntilInstance.set("minTime", $scope.timeFrom);
+                    }
+                    else {
+                        timeUntilInstance.set("minTime", undefined);
+                    };
+                };
+
+                function updateTimeFrom(dateFrom, dateUntil) {
+                    if (areDatesEquals(dateFrom, dateUntil)) {
+                        timeFromInstance.set("maxTime", $scope.timeUntil);
+                    }
+                    else {
+                        timeUntilInstance.set("maxTime", undefined);
+                    };
+                };
+
+                function updateTimes(dateFrom, dateUntil) {
+                    updateTimeUntil(dateFrom, dateUntil);
+                    updateTimeFrom(dateFrom, dateUntil);                   
+                };
+
                 //fechas
                 var dateFormat = 'd-m-Y';
                 var timeFormat = "H:i";
@@ -89,6 +124,10 @@
                     maxDate: today,
                     onChange: function (selectedDates, dateStr, instance) {
                         dateUntilInstance.set("minDate", instance.parseDate(dateStr, dateFormat));
+
+                        var dateFrom = formatJsDate(selectedDates[0]);
+                        updateTimes(dateFrom, $scope.dateUntil);
+                        $scope.timeFrom = "";
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         dateFromInstance = instance;
@@ -101,6 +140,10 @@
                     minDate: today,
                     onChange: function (selectedDates, dateStr, instance) {
                         dateFromInstance.set("maxDate", instance.parseDate(dateStr, dateFormat));
+
+                        var dateUntil = formatJsDate(selectedDates[0]);
+                        updateTimes($scope.dateFrom, dateUntil);
+                        $scope.timeUntil = "";
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         dateUntilInstance = instance;
@@ -111,10 +154,11 @@
                     enableTime: true,
                     noCalendar: true,
                     dateFormat: timeFormat,
-                    maxDate: today,
+                    maxTime: $scope.timeUntil,
+                    defaultDate: $scope.timeFrom,
                     time_24hr: true,
                     onChange: function (selectedDates, dateStr, instance) {
-                        timeUntilInstance.set("minDate", instance.parseDate(dateStr, dateFormat));
+                        updateTimeUntil();
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         timeFromInstance = instance;
@@ -125,10 +169,11 @@
                     enableTime: true,
                     noCalendar: true,
                     dateFormat: timeFormat,
-                    minDate: $scope.timeFrom,
+                    minTime: $scope.timeFrom,
+                    defaultDate: $scope.timeUntil,
                     time_24hr: true,
                     onChange: function (selectedDates, dateStr, instance) {
-                        timeFromInstance.set("maxDate", instance.parseDate(dateStr, dateFormat));
+                        updateTimeFrom();
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         timeUntilInstance = instance;
