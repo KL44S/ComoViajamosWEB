@@ -56,6 +56,10 @@
     margin-top: 25px;
 }
 
+.label-form.disabled {
+    color: #DCDCDC;
+}
+
 .label-input {
     font-size: 12px;
     font-weight: 600;
@@ -71,6 +75,17 @@
     padding-top: 12px;
     font-size: 12px;
     margin-bottom: 1px;
+}
+
+.form-input.ng-invalid {
+    border-color: #EC6347;
+    color: #EC6347;
+}
+
+.form-input.ng-invalid,
+.form-input.ng-invalid + i.date,
+.form-input.ng-invalid + i.time {
+    color: #EC6347;
 }
 
 .form-input::-webkit-input-placeholder {

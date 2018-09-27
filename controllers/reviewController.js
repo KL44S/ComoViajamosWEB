@@ -31,34 +31,44 @@
             };
 
             function formatJsDate(date) {
-                var separator = "-";
-                var day = date.getDate();
-                var month = date.getMonth() + 1;
-                var year = date.getFullYear();
+                var formattedDate = "";
 
-                var formattedDay = addZeroIfItIsNecessary(day);
-                var formattedMonth = addZeroIfItIsNecessary(month);
+                if (date !== undefined) {
+                    var separator = "-";
+                    var day = date.getDate();
+                    var month = date.getMonth() + 1;
+                    var year = date.getFullYear();
 
-                var formattedDate = formattedDay + separator + formattedMonth + separator + year;
+                    var formattedDay = addZeroIfItIsNecessary(day);
+                    var formattedMonth = addZeroIfItIsNecessary(month);
+
+                    var formattedDate = formattedDay + separator + formattedMonth + separator + year;
+                };
 
                 return formattedDate;
             };
 
             function formatJsTime(time) {
-                var separator = ":";
-                var hours = time.getHours();
-                var minutes = time.getMinutes();
+                var formattedTime = "";
 
-                var formattedHours = addZeroIfItIsNecessary(hours);
-                var formattedMinutes = addZeroIfItIsNecessary(minutes);
+                if (time !== undefined) {
+                    var separator = ":";
+                    var hours = time.getHours();
+                    var minutes = time.getMinutes();
 
-                var formattedTime = formattedHours + separator + formattedMinutes;
+                    var formattedHours = addZeroIfItIsNecessary(hours);
+                    var formattedMinutes = addZeroIfItIsNecessary(minutes);
+
+                    var formattedTime = formattedHours + separator + formattedMinutes;
+                };
 
                 return formattedTime;
             };
 
             function getFromTime(now) {
-                now.setMinutes(now.getMinutes() - 30);
+                if (now !== undefined) {
+                    now.setMinutes(now.getMinutes() - 30);
+                };
 
                 return formatJsTime(now);
             };
@@ -90,7 +100,7 @@
                         timeFromInstance.set("maxTime", $scope.timeUntil);
                     }
                     else {
-                        timeUntilInstance.set("maxTime", undefined);
+                        timeFromInstance.set("maxTime", undefined);
                     };
                 };
 

@@ -121,3 +121,19 @@
 .select-select input::placeholder {
     color: black;
 }
+
+.custom-select.ng-invalid .select-select:not(.disabled) {
+    border-color: #EC6347;
+}
+
+.custom-select.ng-invalid .select-select:not(.disabled) i {
+    color: #EC6347;
+}
+
+.custom-select.ng-invalid .select-select:not(.disabled) input::-webkit-input-placeholder {
+    color: #EC6347;
+}
+
+.custom-select.ng-invalid .select-select:not(.disabled) input::placeholder {
+    color: #EC6347;
+}
