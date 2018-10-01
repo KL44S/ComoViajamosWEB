@@ -24,6 +24,13 @@
 
             var transportBranchService = {};
 
+            transportBranchService.isValid(selectedTransportBranch) {
+                var result = (selectedTransportBranch.id !== undefined && selectedTransportBranch.id !== "" 
+                                && selectedTransportBranch.id !== null);
+
+                return result;
+            };
+
             transportBranchService.getTransportBranches = function (transportId, transportBranchId) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;

@@ -12,7 +12,7 @@
 
                     <div class="subform-block radio-block">
                         <label ng-repeat="transportType in transportTypes">
-                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group" ng-class="{'checked': transportType.selected}">
+                            <input class="radio-form" type="radio" id="{{transportType.description}}" name="radio-group" ng-class="{'checked': transportType.selected, 'ng-invalid': form.transportType.isInvalid}">
                             <label class="label-input" for="{{transportType.description}}" ng-click="transportTypeHasBeenSelected(transportType);">{{transportType.description}}</label>
                         </label>
                     </div>
@@ -20,17 +20,17 @@
                     <div class="subform-block">
 
                         <label class="label-input">Línea<span class="required"></span></label>
-                        <div class="custom-select">
+                        <div class="custom-select" ng-class="{'ng-invalid': form.transport.isInvalid}">
                             <custom-select items="transports" selected="selectedTransport.description" change="transportHasBeenSelected(selectedItem);"></custom-select>
                         </div>
 
                         <label class="label-input">Ramal<span class="required"></span></label>
-                        <div class="custom-select">
+                        <div class="custom-select" ng-class="{'ng-invalid': form.transportBranch.isInvalid}">
                             <custom-select items="branches" selected="selectedBranch.description" change="branchHasBeenSelected(selectedItem);"></custom-select>
                         </div>
 
                         <label class="label-input">Orientación<span class="required"></span></label>
-                        <div class="custom-select">
+                        <div class="custom-select" ng-class="{'ng-invalid': form.transportOrientation.isInvalid}">
                             <custom-select items="orientations" selected="selectedOrientation.description" change="orientationHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
@@ -44,17 +44,17 @@
 
                     <div class="subform-block">
                         <label class="label-input">Desde<span class="required"></span></label>
-                        <input class="form-input" placeholder="Fecha" ng-flatpickr fp-opts="dateFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateFrom" required>
+                        <input class="form-input" ng-class="{'ng-invalid': form.dateFrom.isInvalid}" placeholder="Fecha" ng-flatpickr fp-opts="dateFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateFrom">
                         <i class="icon-calendar-1 date"></i>
-                        <input class="form-input" placeholder="Hora" ng-flatpickr fp-opts="timeFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeFrom" required>
+                        <input class="form-input" ng-class="{'ng-invalid': form.timeFrom.isInvalid}" placeholder="Hora" ng-flatpickr fp-opts="timeFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeFrom">
                         <i class="icon-clock time"></i>
                     </div>
 
                     <div class="subform-block">
                         <label class="label-input">Hasta<span class="required"></span></label>
-                        <input class="form-input" placeholder="Fecha" ng-flatpickr fp-opts="dateUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateUntil" required>
+                        <input class="form-input" ng-class="{'ng-invalid': form.dateUntil.isInvalid}" placeholder="Fecha" ng-flatpickr fp-opts="dateUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateUntil">
                         <i class="icon-calendar-1 date"></i>
-                        <input class="form-input" placeholder="Hora" ng-flatpickr fp-opts="timeUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeUntil" required>
+                        <input class="form-input" ng-class="{'ng-invalid': form.timeUntil.isInvalid}" placeholder="Hora" ng-flatpickr fp-opts="timeUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeUntil">
                         <i class="icon-clock time"></i>
                     </div>
 
@@ -65,14 +65,14 @@
                 <div class="form-block">
                     <div class="subform-block">
                         <label class="label-form">¿CÓMO VIAJASTE?<span class="required"></span></label>
-                        <div class="custom-select">
+                        <div class="custom-select" ng-class="{'ng-invalid': form.feeling.isInvalid}" >
                             <custom-select items="feelings" selected="selectedFeeling.description" change="feelingHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
 
                     <div class="subform-block">
                         <label class="label-form" ng-class="{'disabled': !reasons.length}">CONTANOS POR QUÉ<span ng-class="{'required': reasons.length > 0}"></span></label>
-                        <div class="custom-select">
+                        <div class="custom-select" ng-class="{'ng-invalid': form.reason.isInvalid}">
                             <custom-select items="reasons" selected="selectedReason.description" change="reasonHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                 <hr />
 
                 <div class="form-block">
-                    <button class="review-submit-btn" ng-class="{'disabled': formIsValid}">LISTO</button>
+                    <button class="review-submit-btn" ng-click="saveReview();">LISTO</button>
                 </div>
             </form>
         </div>

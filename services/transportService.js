@@ -24,6 +24,12 @@
 
             var transportService = {};
 
+            transportService.isValid(selectedTransport) {
+                var result = (selectedTransport.id !== undefined && selectedTransport.id !== "" && selectedTransport.id !== null);
+
+                return result;
+            };
+
             transportService.getTransportTypes = function () {
                 return transportTypeService.getTransportTypes();
             };

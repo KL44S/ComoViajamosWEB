@@ -196,6 +196,52 @@
             };
 
             function initReviewForm() {
+                $scope.form = {
+                    transportType: new FormItem(),
+                    transport: new FormItem(),
+                    transportBranch: new FormItem(),
+                    transportOrientation: new FormItem(),
+                    feeling: new FormItem(),
+                    reason: new FormItem(),
+                    dateFrom: new FormItem(),
+                    dateUntil: new FormItem(),
+                    timeFrom: new FormItem(),
+                    timeUntil: new FormItem(),
+                    validate: function () {
+                        this.transportType.isInvalid = !transportTypeService.isValid($scope.selectedTransportTyp);
+                        this.transport.isInvalid = !transportService.isValid($scope.selectedTransport);
+                        this.transportBranch.isInvalid = !transportBranchService.isValid($scope.selectedBranch);
+                        this.transportOrientation.isInvalid = !($scope.selectedOrientation.id !== undefined && $scope.selectedOrientation.id !== ""
+                                                                    && $scope.selectedOrientation.id !== null);
+                        this.feeling.isInvalid = !($scope.selectedFeeling.id !== undefined && $scope.selectedFeeling.id !== ""
+                                                    && $scope.selectedFeeling.id !== null);
+                        this.reason.isInvalid = !($scope.reasons.length !== 0 && $scope.selectedReason.id !== undefined
+                                                     && $scope.selectedReason.id !== "" && $scope.selectedReason.id !== null);
+                        this.dateFrom.isInvalid = !($scope.dateFrom !== undefined && $scope.dateFrom !== ""
+                                                    && $scope.dateFrom !== null);
+                        this.dateUntil.isInvalid = !($scope.dateUntil !== undefined && $scope.dateUntil !== ""
+                                                    && $scope.dateUntil !== null);
+                        this.timeFrom.isInvalid = !($scope.timeFrom !== undefined && $scope.timeFrom !== ""
+                                                    && $scope.timeFrom !== null);
+                        this.timeUntil.isInvalid = !($scope.timeUntil !== undefined && $scope.timeUntil !== ""
+                                                    && $scope.timeUntil !== null);
+                    },
+                    isValid: function () {
+                        var result = !this.transportType.isInvalid &&
+                                     !this.transport.isInvalid &&
+                                     !this.transportBranch.isInvalid &&
+                                     !this.transportOrientation.isInvalid &&
+                                     !this.feeling.isInvalid &&
+                                     !this.reason.isInvalid &&
+                                     !this.dateFrom.isInvalid &&
+                                     !this.dateUntil.isInvalid &&
+                                     !this.timeFrom.isInvalid &&
+                                     !this.timeUntil.isInvalid;
+
+                        return result;
+                    }
+                };
+
                 $scope.reviewForm = {
                     isReviewFormClosed: true,
                     openSidebarIcon: "icon-menu",
@@ -214,6 +260,8 @@
                 $scope.selectedTransportType = undefined;
 
                 $scope.transportTypeHasBeenSelected = function (transportType) {
+                    $scope.form.transportType.isInvalid = false;
+
                     var transportTypesNumber = $scope.transportTypes.length;
 
                     for (var i = 0; i < transportTypesNumber; i++) {
@@ -242,6 +290,8 @@
                     mapSelectedOption($scope.selectedTransport, selectedItem);
 
                     if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        $scope.form.transport.isInvalid = false;
+
                         var transportId = selectedItem.value;
 
                         transportService.getTransportBranches(transportId).then(function (branches) {
@@ -260,6 +310,8 @@
                     mapSelectedOption($scope.selectedBranch, selectedItem);
 
                     if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        $scope.form.transportBranch.isInvalid = false;
+
                         var branchId = selectedItem.value;
 
                         var arrayFilters = [
@@ -281,6 +333,8 @@
                     mapSelectedOption($scope.selectedOrientation, selectedItem);
 
                     if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        $scope.form.transportOrientation.isInvalid = false;
+
                         reviewService.getReviewFeelings().then(function (feelings) {
                             $scope.feelings = customSelectService.GetCustomSelectArrayOptions(feelings, "feelingId", "description");
                         });
@@ -289,12 +343,18 @@
 
                 $scope.reasonHasBeenSelected = function (selectedItem) {
                     mapSelectedOption($scope.selectedReason, selectedItem);
+
+                    if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        $scope.form.reason.isInvalid = false;
+                    };
                 };
 
                 $scope.feelingHasBeenSelected = function (selectedItem) {
                     mapSelectedOption($scope.selectedFeeling, selectedItem);
 
                     if (selectedItem !== undefined && selectedItem !== null && selectedItem.value !== null) {
+                        $scope.form.feeling.isInvalid = false;
+
                         var feelingId = selectedItem.value;
 
                         reviewService.getReviewFeelingReasons(feelingId, $scope.selectedTransportType).then(function (reasons) {
@@ -312,13 +372,18 @@
                 };
 
                 $scope.saveReview = function () {
-                    var review = {
+                    $scope.form.validate();
 
+                    if ($scope.form.isValid()) {
+                        console.log("persistir");
+                        var review = {
+
+                        };
+
+                        //reviewService.saveReview(review).then(function (reasons) {
+                        //    $scope.dismissPopup();
+                        //});
                     };
-
-                    reviewService.saveReview(review).then(function (reasons) {
-                        $scope.dismissPopup();
-                    });
                 };
             };
 

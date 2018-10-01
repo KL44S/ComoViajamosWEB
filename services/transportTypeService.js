@@ -8,6 +8,12 @@
 
             var transportTypeService = {};
 
+            transportTypeService.isValid(transportTypeId) {
+                var result = (transportTypeId !== undefined && transportTypeId !== "" && transportTypeId !== null);
+
+                return result;
+            };
+
             transportTypeService.getTransportTypes = function () {
                 var deferred = $q.defer();
                 var promise = deferred.promise;

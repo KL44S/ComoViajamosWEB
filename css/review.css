@@ -154,7 +154,6 @@ i.time {
     left: -9999px;
 }
 
-[type="radio"] + label,
 [type="radio"] + label {
     position: relative;
     padding-left: 25px;
@@ -165,7 +164,10 @@ i.time {
     color: black;
 }
 
-[type="radio"] + label:before,
+[type="radio"].ng-invalid + label {
+    color: #EC6347;
+}
+
 [type="radio"] + label:before {
     content: '';
     position: absolute;
@@ -178,7 +180,10 @@ i.time {
     background: white;
 }
 
-[type="radio"] + label:after,
+[type="radio"].ng-invalid + label:before {
+    border-color: #EC6347;
+}
+
 [type="radio"] + label:after {
     content: '';
     width: 12px;
