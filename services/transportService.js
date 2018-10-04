@@ -24,7 +24,15 @@
 
             var transportService = {};
 
-            transportService.isValid(selectedTransport) {
+            transportService.isTransportTypeValid = function (selectedTransportTypeId) {
+                return transportTypeService.isTransportTypeValid(selectedTransportTypeId);
+            };
+
+            transportService.isBranchValid = function (selectedBranch) {
+                return transportBranchService.isBranchValid(selectedBranch);
+            };
+
+            transportService.isTransportValid = function (selectedTransport) {
                 var result = (selectedTransport.id !== undefined && selectedTransport.id !== "" && selectedTransport.id !== null);
 
                 return result;

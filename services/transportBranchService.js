@@ -24,7 +24,7 @@
 
             var transportBranchService = {};
 
-            transportBranchService.isValid(selectedTransportBranch) {
+            transportBranchService.isBranchValid = function (selectedTransportBranch) {
                 var result = (selectedTransportBranch.id !== undefined && selectedTransportBranch.id !== "" 
                                 && selectedTransportBranch.id !== null);
 

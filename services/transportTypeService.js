@@ -8,7 +8,7 @@
 
             var transportTypeService = {};
 
-            transportTypeService.isValid(transportTypeId) {
+            transportTypeService.isTransportTypeValid = function (transportTypeId) {
                 var result = (transportTypeId !== undefined && transportTypeId !== "" && transportTypeId !== null);
 
                 return result;

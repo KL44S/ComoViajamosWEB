@@ -208,9 +208,10 @@
                     timeFrom: new FormItem(),
                     timeUntil: new FormItem(),
                     validate: function () {
-                        this.transportType.isInvalid = !transportTypeService.isValid($scope.selectedTransportTyp);
-                        this.transport.isInvalid = !transportService.isValid($scope.selectedTransport);
-                        this.transportBranch.isInvalid = !transportBranchService.isValid($scope.selectedBranch);
+                        this.transportType.isInvalid = !transportService.isTransportTypeValid($scope.selectedTransportType);
+                        this.transport.isInvalid = !transportService.isTransportValid($scope.selectedTransport);
+                        this.transportBranch.isInvalid = !transportService.isBranchValid($scope.selectedBranch);
+
                         this.transportOrientation.isInvalid = !($scope.selectedOrientation.id !== undefined && $scope.selectedOrientation.id !== ""
                                                                     && $scope.selectedOrientation.id !== null);
                         this.feeling.isInvalid = !($scope.selectedFeeling.id !== undefined && $scope.selectedFeeling.id !== ""
