@@ -34,7 +34,7 @@
                 var formattedDate = "";
 
                 if (date !== undefined) {
-                    var separator = "-";
+                    var separator = reviewConstants.dateSeparator;
                     var day = date.getDate();
                     var month = date.getMonth() + 1;
                     var year = date.getFullYear();
@@ -52,7 +52,7 @@
                 var formattedTime = "";
 
                 if (time !== undefined) {
-                    var separator = ":";
+                    var separator = reviewConstants.timeSeparator;
                     var hours = time.getHours();
                     var minutes = time.getMinutes();
 
@@ -67,7 +67,7 @@
 
             function getFromTime(now) {
                 if (now !== undefined) {
-                    now.setMinutes(now.getMinutes() - 30);
+                    now.setMinutes(now.getMinutes() - reviewConstants.minutesBetweeness);
                 };
 
                 return formatJsTime(now);
@@ -110,8 +110,8 @@
                 };
 
                 //fechas
-                var dateFormat = 'd-m-Y';
-                var timeFormat = "H:i";
+                var dateFormat = reviewConstants.dateFormat;
+                var timeFormat = reviewConstants.timeFormat;
                 var today = 'today';
 
                 var dateFromInstance;
@@ -211,21 +211,23 @@
                         this.transportType.isInvalid = !transportService.isTransportTypeValid($scope.selectedTransportType);
                         this.transport.isInvalid = !transportService.isTransportValid($scope.selectedTransport);
                         this.transportBranch.isInvalid = !transportService.isBranchValid($scope.selectedBranch);
+                        this.transportOrientation.isInvalid = !transportService.isOrientationValid($scope.selectedOrientation);
+                        this.feeling.isInvalid = !reviewService.isFeelingValid($scope.selectedFeeling);
+                        this.reason.isInvalid = !reviewService.isReasonValid($scope.reasons, $scope.selectedReason);
 
-                        this.transportOrientation.isInvalid = !($scope.selectedOrientation.id !== undefined && $scope.selectedOrientation.id !== ""
-                                                                    && $scope.selectedOrientation.id !== null);
-                        this.feeling.isInvalid = !($scope.selectedFeeling.id !== undefined && $scope.selectedFeeling.id !== ""
-                                                    && $scope.selectedFeeling.id !== null);
-                        this.reason.isInvalid = !($scope.reasons.length !== 0 && $scope.selectedReason.id !== undefined
-                                                     && $scope.selectedReason.id !== "" && $scope.selectedReason.id !== null);
-                        this.dateFrom.isInvalid = !($scope.dateFrom !== undefined && $scope.dateFrom !== ""
-                                                    && $scope.dateFrom !== null);
-                        this.dateUntil.isInvalid = !($scope.dateUntil !== undefined && $scope.dateUntil !== ""
-                                                    && $scope.dateUntil !== null);
-                        this.timeFrom.isInvalid = !($scope.timeFrom !== undefined && $scope.timeFrom !== ""
-                                                    && $scope.timeFrom !== null);
-                        this.timeUntil.isInvalid = !($scope.timeUntil !== undefined && $scope.timeUntil !== ""
-                                                    && $scope.timeUntil !== null);
+                        //Fechas
+                        var isDateFromValid = reviewService.isDatetimeValid($scope.dateFrom);
+                        var isDateUntilvalid = reviewService.isDatetimeValid($scope.dateUntil);
+                        var isTimeFromValid = reviewService.isDatetimeValid($scope.timeFrom);
+                        var isTimeUntilValid = reviewService.isDatetimeValid($scope.timeUntil);
+
+                        var areDatetimesValid = reviewService.areDatetimesValid(new Datetime($scope.dateFrom, $scope.timeFrom),
+                                                                                new Datetime($scope.dateUntil, $scope.timeUntil));
+
+                        this.dateFrom.isInvalid = !(isDateFromValid && areDatetimesValid);
+                        this.dateUntil.isInvalid = !(isDateUntilvalid && areDatetimesValid);
+                        this.timeFrom.isInvalid = !(isTimeFromValid && areDatetimesValid);
+                        this.timeUntil.isInvalid = !(isTimeUntilValid && areDatetimesValid);
                     },
                     isValid: function () {
                         var result = !this.transportType.isInvalid &&

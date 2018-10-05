@@ -32,6 +32,10 @@
                 return transportBranchService.isBranchValid(selectedBranch);
             };
 
+            transportService.isOrientationValid = function (selectedOrientation) {
+                return transportBranchService.isOrientationValid(selectedOrientation);
+            };
+
             transportService.isTransportValid = function (selectedTransport) {
                 var result = (selectedTransport.id !== undefined && selectedTransport.id !== "" && selectedTransport.id !== null);
 

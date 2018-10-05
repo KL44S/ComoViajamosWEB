@@ -8,6 +8,16 @@
 
             var reviewFeelingService = {};
 
+            reviewFeelingService.isReasonValid = function (reasons, selectedReason) {
+                return reviewFeelingReasonService.isReasonValid(reasons, selectedReason);
+            };
+
+            reviewFeelingService.isFeelingValid = function (selectedFeeling) {
+                var result = (selectedFeeling.id !== undefined && selectedFeeling.id !== "" && selectedFeeling.id !== null);
+
+                return result;
+            };
+
             reviewFeelingService.getReviewFeelingReasons = function (feelingId, transportTypeId) {
                 return reviewFeelingReasonService.getReviewFeelingReasons(feelingId, transportTypeId);
             };

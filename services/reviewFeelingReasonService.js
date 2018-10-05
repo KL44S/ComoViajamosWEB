@@ -24,6 +24,15 @@
 
             var reviewFeelingReasonService = {};
 
+            reviewFeelingReasonService.isReasonValid = function (reasons, selectedReason) {
+                var areThereReasons = (reasons !== undefined && reasons.length !== 0);
+
+                var result = (!areThereReasons ||
+                                (selectedReason.id !== undefined && selectedReason.id !== "" && selectedReason.id !== null) );
+
+                return result;
+            };
+
             reviewFeelingReasonService.getReviewFeelingReasons = function (feelingId, transportTypeId) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;

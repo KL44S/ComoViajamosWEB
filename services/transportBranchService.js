@@ -31,6 +31,13 @@
                 return result;
             };
 
+            transportBranchService.isOrientationValid = function (selectedOrientation) {
+                var result = (selectedOrientation.id !== undefined && selectedOrientation.id !== ""
+                                                                    && selectedOrientation.id !== null);
+
+                return result;
+            };
+
             transportBranchService.getTransportBranches = function (transportId, transportBranchId) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;
