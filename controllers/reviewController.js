@@ -378,7 +378,7 @@
                     $scope.form.validate();
 
                     if ($scope.form.isValid()) {
-                        console.log("persistir");
+                        
                         var review = {
 
                         };
