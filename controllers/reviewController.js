@@ -3,8 +3,8 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService", "spinnerService",
-        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService) {
+        "reviewService", "spinnerService", "$window",
+        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -137,7 +137,13 @@
 
                         var dateFrom = formatJsDate(selectedDates[0]);
                         updateTimes(dateFrom, $scope.dateUntil);
+
                         $scope.timeFrom = "";
+
+                        $scope.form.dateFrom.isInvalid = false;
+                        $scope.form.timeFrom.isInvalid = true;
+
+                        console.log(selectedDates);
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         dateFromInstance = instance;
@@ -153,7 +159,13 @@
 
                         var dateUntil = formatJsDate(selectedDates[0]);
                         updateTimes($scope.dateFrom, dateUntil);
+
                         $scope.timeUntil = "";
+
+                        $scope.form.dateUntil.isInvalid = false;
+                        $scope.form.timeUntil.isInvalid = true;
+
+                        console.log(selectedDates);
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         dateUntilInstance = instance;
@@ -169,6 +181,9 @@
                     time_24hr: true,
                     onChange: function (selectedDates, dateStr, instance) {
                         updateTimeUntil();
+                        $scope.form.timeFrom.isInvalid = false;
+
+                        console.log(selectedDates);
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         timeFromInstance = instance;
@@ -184,6 +199,9 @@
                     time_24hr: true,
                     onChange: function (selectedDates, dateStr, instance) {
                         updateTimeFrom();
+                        $scope.form.timeUntil.isInvalid = false;
+
+                        console.log(selectedDates);
                     },
                     onReady: function (selectedDates, dateStr, instance) {
                         timeUntilInstance = instance;
@@ -207,6 +225,7 @@
                     dateUntil: new FormItem(),
                     timeFrom: new FormItem(),
                     timeUntil: new FormItem(),
+                    captcha: new FormItem(true),
                     validate: function () {
                         this.transportType.isInvalid = !transportService.isTransportTypeValid($scope.selectedTransportType);
                         this.transport.isInvalid = !transportService.isTransportValid($scope.selectedTransport);
@@ -221,8 +240,8 @@
                         var isTimeFromValid = reviewService.isDatetimeValid($scope.timeFrom);
                         var isTimeUntilValid = reviewService.isDatetimeValid($scope.timeUntil);
 
-                        var areDatetimesValid = reviewService.areDatetimesValid(new Datetime($scope.dateFrom, $scope.timeFrom),
-                                                                                new Datetime($scope.dateUntil, $scope.timeUntil));
+                        var areDatetimesValid = reviewService.areDatetimesValid(new CustomDatetime($scope.dateFrom, $scope.timeFrom),
+                                                                                new CustomDatetime($scope.dateUntil, $scope.timeUntil));
 
                         this.dateFrom.isInvalid = !(isDateFromValid && areDatetimesValid);
                         this.dateUntil.isInvalid = !(isDateUntilvalid && areDatetimesValid);
@@ -231,15 +250,16 @@
                     },
                     isValid: function () {
                         var result = !this.transportType.isInvalid &&
-                                     !this.transport.isInvalid &&
-                                     !this.transportBranch.isInvalid &&
-                                     !this.transportOrientation.isInvalid &&
-                                     !this.feeling.isInvalid &&
-                                     !this.reason.isInvalid &&
-                                     !this.dateFrom.isInvalid &&
-                                     !this.dateUntil.isInvalid &&
-                                     !this.timeFrom.isInvalid &&
-                                     !this.timeUntil.isInvalid;
+                            !this.transport.isInvalid &&
+                            !this.transportBranch.isInvalid &&
+                            !this.transportOrientation.isInvalid &&
+                            !this.feeling.isInvalid &&
+                            !this.reason.isInvalid &&
+                            !this.dateFrom.isInvalid &&
+                            !this.dateUntil.isInvalid &&
+                            !this.timeFrom.isInvalid &&
+                            !this.timeUntil.isInvalid &&
+                            !this.captcha.isInvalid;
 
                         return result;
                     }
@@ -382,12 +402,20 @@
                         var review = {
 
                         };
-
+                        console.log("pers");
                         //reviewService.saveReview(review).then(function (reasons) {
                         //    $scope.dismissPopup();
                         //});
                     };
                 };
+            };
+
+            function captchaWasSuccessed() {
+                $scope.form.captcha.isInvalid = false;
+            };
+
+            function captchaWasExpired() {
+                $scope.form.captcha.isInvalid = true;
             };
 
             function initSpinner() {
@@ -396,6 +424,11 @@
             };
 
             function init() {
+                grecaptcha.render('recaptcha', {
+                    'callback': captchaWasSuccessed,
+                    'expiredCallback': captchaWasExpired
+                });
+
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
 

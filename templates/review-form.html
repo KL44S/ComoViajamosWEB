@@ -65,7 +65,7 @@
                 <div class="form-block">
                     <div class="subform-block">
                         <label class="label-form">¿CÓMO VIAJASTE?<span class="required"></span></label>
-                        <div class="custom-select" ng-class="{'ng-invalid': form.feeling.isInvalid}" >
+                        <div class="custom-select" ng-class="{'ng-invalid': form.feeling.isInvalid}">
                             <custom-select items="feelings" selected="selectedFeeling.description" change="feelingHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
@@ -76,6 +76,12 @@
                             <custom-select items="reasons" selected="selectedReason.description" change="reasonHasBeenSelected(selectedItem);"></custom-select>
                         </div>
                     </div>
+                </div>
+
+                <hr />
+
+                <div class="form-block">
+                    <div id="recaptcha" ng-class="{'ng-invalid': form.captcha.isInvalid}" class="g-recaptcha" data-sitekey="6Le_OnQUAAAAAKTZbYcByh3tLeP3ZFdXJxv0yEdH"></div>
                 </div>
 
                 <hr />

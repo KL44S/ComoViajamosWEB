@@ -1,4 +1,4 @@
-﻿function Datetime(date, time) {
+﻿function CustomDatetime(date, time) {
     this.date = date;
     this.time = time;
 

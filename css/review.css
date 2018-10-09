@@ -117,6 +117,19 @@ i.time {
     margin-left: -35px;
 }
 
+#recaptcha {
+    display: flex;
+    justify-content: center;
+}
+
+.rc-anchor-light.rc-anchor-normal {
+    border-radius: 20px !important;
+}
+
+#recaptcha.ng-invalid html div.rc-anchor {
+    border: solid 2px #EC6347;
+}
+
 .review-submit-btn {
     padding: 13px;
     width: 206px;

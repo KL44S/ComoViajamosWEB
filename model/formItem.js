@@ -1,3 +1,10 @@
-﻿function FormItem() {
-    this.isInvalid = false;
+﻿function FormItem(isInvalid) {
+
+    if (isInvalid !== undefined) {
+        this.isInvalid = isInvalid;
+    }
+    else {
+        this.isInvalid = false;
+    };
+
 }
