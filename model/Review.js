@@ -1,4 +1,7 @@
-﻿function Review(datetimeFrom, datetimeUntil, reivewTravelFeeling, reviewTransport) {
+﻿function Review(datetimeFrom, datetimeUntil, travelFeelingId,
+    travelFeelingReasonIds, transportId, transportBranchId,
+    transportBranchOrientationId, captchaToken) {
+
     if (datetimeFrom === undefined) {
         this.datetimeFrom = null;
     }
@@ -13,17 +16,40 @@
         this.datetimeUntil = datetimeUntil;
     }
 
-    if (reivewTravelFeeling === undefined) {
-        this.reivewTravelFeeling = null;
+    if (travelFeelingId === undefined) {
+        this.travelFeelingId = null;
     }
     else {
-        this.reivewTravelFeeling = reivewTravelFeeling;
+        this.travelFeelingId = travelFeelingId;
     }
 
-    if (reviewTransport === reviewTransport) {
-        this.reviewTransport = null;
+    if (travelFeelingReasonIds === undefined) {
+        this.travelFeelingReasonIds = null;
     }
     else {
-        this.reviewTransport = reviewTransport;
+        this.travelFeelingReasonIds = travelFeelingReasonIds;
     }
+
+    if (transportId === undefined) {
+        this.transportId = null;
+    }
+    else {
+        this.transportId = transportId;
+    }
+
+    if (transportBranchId === undefined) {
+        this.transportBranchId = null;
+    }
+    else {
+        this.transportBranchId = transportBranchId;
+    }
+
+    if (transportBranchOrientationId === undefined) {
+        this.transportBranchOrientationId = null;
+    }
+    else {
+        this.transportBranchOrientationId = transportBranchOrientationId;
+    }
+
+    this.captchaToken = captchaToken;
 }

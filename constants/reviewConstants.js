@@ -10,7 +10,8 @@
             timeSeparator: ":",
             dateSeparator: "-",
             dateFormat: "d" + this.dateSeparator + "m" + this.dateSeparator + "Y",
-            timeFormat: "H" + this.timeSeparator + "i"
+            timeFormat: "H" + this.timeSeparator + "i",
+            timePrefix: "T"
         };
 
         return reviewConstants;

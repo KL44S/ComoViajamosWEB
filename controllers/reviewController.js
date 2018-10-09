@@ -275,12 +275,15 @@
                     $scope.reviewForm.isReviewFormClosed = !$scope.reviewForm.isReviewFormClosed;
                 };
 
-                $scope.selectedTransport = new ReviewTransport();
-                $scope.selectedBranch = new ReviewTransportBranch();
+
                 $scope.selectedOrientation = new ReviewTransportBranchOrientation();
-                $scope.selectedFeeling = new ReviewFeeling();
+                $scope.selectedBranch = new ReviewTransportBranch(undefined, undefined, $scope.selectedOrientation);
+                $scope.selectedTransport = new ReviewTransport(undefined, undefined, $scope.selectedBranch);
+
                 $scope.selectedReason = new ReviewFeelingReason();
-                $scope.selectedTransportType = undefined;
+                $scope.selectedFeeling = new ReviewFeeling(undefined, undefined, $scope.selectedReason);
+
+                $scope.review = new Review();
 
                 $scope.transportTypeHasBeenSelected = function (transportType) {
                     $scope.form.transportType.isInvalid = false;
@@ -398,24 +401,36 @@
                     $scope.form.validate();
 
                     if ($scope.form.isValid()) {
-                        
-                        var review = {
 
-                        };
-                        console.log("pers");
-                        //reviewService.saveReview(review).then(function (reasons) {
-                        //    $scope.dismissPopup();
-                        //});
+                        $scope.review.datetimeFrom = getDatetimeFormattedToSave($scope.dateFrom, $scope.timeFrom);
+                        $scope.review.datetimeUntil = getDatetimeFormattedToSave($scope.dateUntil, $scope.timeUntil);
+                        $scope.review.travelFeelingId = $scope.selectedFeeling.id;
+                        $scope.review.travelFeelingReasonIds = [$scope.selectedReason.id];
+                        $scope.review.transportId = $scope.selectedTransport.id;
+                        $scope.review.transportBranchId = $scope.selectedBranch.id;
+                        $scope.review.transportBranchOrientationId = $scope.selectedOrientation.id;
+
+                        reviewService.saveReview($scope.review).then(function () {
+                            $scope.dismissPopup();
+                        });
                     };
                 };
             };
 
-            function captchaWasSuccessed() {
+            function getDatetimeFormattedToSave(date, time) {
+                var datetime = date + reviewConstants.timePrefix + time;
+
+                return datetime;
+            };
+
+            function captchaWasSuccessed(token) {
                 $scope.form.captcha.isInvalid = false;
+                $scope.review.captchaToken = token;
             };
 
             function captchaWasExpired() {
                 $scope.form.captcha.isInvalid = true;
+                $scope.review.captchaToken = undefined;
             };
 
             function initSpinner() {

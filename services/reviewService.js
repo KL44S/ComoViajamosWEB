@@ -38,11 +38,11 @@
                 return reviewFeelingService.getReviewFeelingReasons(feelingId, transportTypeId);
             };
 
-            reviewService.createReview = function (review) {
+            reviewService.saveReview = function (review) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
-                httpService.post(baseUri, review).then(function (response) {
+                httpService.post(baseUri, review, {'Content-Type': 'application/json'}).then(function (response) {
                     deferred.resolve(response.data);
 
                 }, function errorCallback(error) {
