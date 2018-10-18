@@ -122,6 +122,32 @@
     color: black;
 }
 
+.selected-wrapper {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.selected-wrapper .remove-item {
+    font-size: 9px;
+    margin-left: -22px;
+    font-weight: 900;
+    color: #EC6347;
+}
+
+.selected-wrapper .remove-item:hover {
+    cursor: pointer;
+}
+
+.selected-wrapper .selected-item {
+    margin: 1px;
+    padding: 5px;
+    padding-right: 17px;
+    font-size: 11px;
+    border: 2px solid black;
+    border-radius: 2px;
+    display: inline-block;
+}
+
 .custom-select.ng-invalid .select-select:not(.disabled) {
     border-color: #EC6347;
 }
@@ -137,3 +163,4 @@
 .custom-select.ng-invalid .select-select:not(.disabled) input::placeholder {
     color: #EC6347;
 }
+

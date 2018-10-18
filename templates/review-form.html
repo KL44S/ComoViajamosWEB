@@ -73,7 +73,7 @@
                     <div class="subform-block">
                         <label class="label-form" ng-class="{'disabled': !reasons.length}">CONTANOS POR QUÉ<span ng-class="{'required': reasons.length > 0}"></span></label>
                         <div class="custom-select" ng-class="{'ng-invalid': form.reason.isInvalid}">
-                            <custom-select items="reasons" selected="selectedReason.description" change="reasonHasBeenSelected(selectedItem);"></custom-select>
+                            <custom-multiple-select items="reasons" selected='""' change="reasonsHasBeenSelected(selectedItems);"></custom-multiple-select>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,17 @@
+﻿<div class="selected-wrapper">
+
+    <div  ng-repeat="selectedItem in selected">
+        <span class="selected-item">{{selectedItem.description}}</span>
+        <i ng-click="itemHasBeenRemoved(selectedItem);" class="icon-close remove-item"></i>
+    </div>
+
+</div>
+
+<div class="select-select" ng-class="{open: isDropDownOpened, disabled: areNotThereItems}">
+    <i ng-mousedown="toogleDropdown();" class="icon-dropdown"></i>
+    <input ng-click="openDropdown();" ng-blur="onBlur();" type="text" ng-keyup="filter();" ng-model="selectedItem" placeholder="Buscar...">   
+</div>
+
+<ul ng-class="{open: isDropDownOpened}" class="select-list">
+    <li ng-repeat="item in items" ng-class="{closed: item.filtered}" ng-mousedown="itemHasBeenSelected(item, $event);">{{item.description}}</li>
+</ul>

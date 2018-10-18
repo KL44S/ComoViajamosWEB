@@ -8,8 +8,8 @@
 
             var reviewFeelingService = {};
 
-            reviewFeelingService.isReasonValid = function (reasons, selectedReason) {
-                return reviewFeelingReasonService.isReasonValid(reasons, selectedReason);
+            reviewFeelingService.isReasonValid = function (reasons, selectedReasons) {
+                return reviewFeelingReasonService.isReasonValid(reasons, selectedReasons);
             };
 
             reviewFeelingService.isFeelingValid = function (selectedFeeling) {

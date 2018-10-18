@@ -5,6 +5,27 @@
 
         var arrayService = {};
 
+        arrayService.getIndexOfArrayElementInArray = function (element, array) {
+            var index = 0;
+            var found = false;
+            var arrayLength = array.length;
+
+            while (index < arrayLength && !found) {
+                var currentElement = array[index];
+                found = currentElement == element;
+
+                index++;
+            };
+
+            var foundIndex = -1;
+
+            if (found) {
+                foundIndex = index - 1;
+            };
+
+            return foundIndex;
+        };
+
         arrayService.getArrayElementsByFilters = function (array, filters) {
             var matchedElements = [];
 

@@ -232,7 +232,7 @@
                         this.transportBranch.isInvalid = !transportService.isBranchValid($scope.selectedBranch);
                         this.transportOrientation.isInvalid = !transportService.isOrientationValid($scope.selectedOrientation);
                         this.feeling.isInvalid = !reviewService.isFeelingValid($scope.selectedFeeling);
-                        this.reason.isInvalid = !reviewService.isReasonValid($scope.reasons, $scope.selectedReason);
+                        this.reason.isInvalid = !reviewService.isReasonValid($scope.reasons, $scope.selectedReasons);
 
                         //Fechas
                         var isDateFromValid = reviewService.isDatetimeValid($scope.dateFrom);
@@ -281,6 +281,7 @@
                 $scope.selectedTransport = new ReviewTransport(undefined, undefined, $scope.selectedBranch);
 
                 $scope.selectedReason = new ReviewFeelingReason();
+                $scope.selectedReasons = [];
                 $scope.selectedFeeling = new ReviewFeeling(undefined, undefined, $scope.selectedReason);
 
                 $scope.review = new Review();
@@ -375,6 +376,14 @@
                     };
                 };
 
+                $scope.reasonsHasBeenSelected = function (selectedItems) {
+                    $scope.selectedReasons = selectedItems;
+
+                    if (selectedItems !== undefined && selectedItems !== null && selectedItems.length > 0) {
+                        $scope.form.reason.isInvalid = false;
+                    };
+                };
+
                 $scope.feelingHasBeenSelected = function (selectedItem) {
                     mapSelectedOption($scope.selectedFeeling, selectedItem);
 
@@ -401,11 +410,10 @@
                     $scope.form.validate();
 
                     if ($scope.form.isValid()) {
-
                         $scope.review.datetimeFrom = getDatetimeFormattedToSave($scope.dateFrom, $scope.timeFrom);
                         $scope.review.datetimeUntil = getDatetimeFormattedToSave($scope.dateUntil, $scope.timeUntil);
                         $scope.review.travelFeelingId = $scope.selectedFeeling.id;
-                        $scope.review.travelFeelingReasonIds = [$scope.selectedReason.id];
+                        $scope.review.travelFeelingReasonIds = $scope.selectedReasons;
                         $scope.review.transportId = $scope.selectedTransport.id;
                         $scope.review.transportBranchId = $scope.selectedBranch.id;
                         $scope.review.transportBranchOrientationId = $scope.selectedOrientation.id;
@@ -424,6 +432,7 @@
             };
 
             function captchaWasSuccessed(token) {
+                console.log(token);
                 $scope.form.captcha.isInvalid = false;
                 $scope.review.captchaToken = token;
             };
@@ -433,33 +442,72 @@
                 $scope.review.captchaToken = undefined;
             };
 
+            function captchaWasExcepted() {
+                console.log();
+            };
+
             function initSpinner() {
                 $scope.containerId = "reviewContainer";
                 spinnerService.showSpinner($scope.containerId);
             };
 
-            function init() {
+            function loadCaptcha() {
                 grecaptcha.render('recaptcha', {
                     'callback': captchaWasSuccessed,
-                    'expiredCallback': captchaWasExpired
+                    'expiredCallback': captchaWasExpired,
+                    'errorCallback': captchaWasExcepted
                 });
 
+                $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
+                tryHideSpinner();
+            };
+
+            function loadTransportTypes() {
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
-
-                    spinnerService.hideSpinner($scope.containerId);
+                    
+                    $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.transportTypes] = true;
+                    tryHideSpinner();
                 });
             };
 
+            function tryHideSpinner() {
+                var allRight = true;
+                var index = 0;
+                var loadingElementsLength =  $scope.loadingNecessaryElements.length;
+
+                while (allRight && index < loadingElementsLength) {
+                    var currentLoadingElement = $scope.loadingNecessaryElements[index];
+                    allRight = allRight && currentLoadingElement;
+
+                    index++;
+                };
+
+                if (allRight) {
+                    spinnerService.hideSpinner($scope.containerId);
+                };
+            };
+
             //público
+            $scope.loadingNecessaryElements = [
+                false,
+                false
+            ];
+
+            $scope.loadingNecessaryElementsIndexes = {
+                captcha: 0,
+                transportTypes: 1
+            };
+
             initSpinner();
-            initDates();
-            initReviewForm();
 
             angular.element(document).ready(function () {
-                init();
+                loadCaptcha();
             });
 
+            loadTransportTypes();
+            initDates();
+            initReviewForm();
         }]);
 
 })();

@@ -24,11 +24,11 @@
 
             var reviewFeelingReasonService = {};
 
-            reviewFeelingReasonService.isReasonValid = function (reasons, selectedReason) {
+            reviewFeelingReasonService.isReasonValid = function (reasons, selectedReasons) {
                 var areThereReasons = (reasons !== undefined && reasons.length !== 0);
 
                 var result = (!areThereReasons ||
-                                (selectedReason.id !== undefined && selectedReason.id !== "" && selectedReason.id !== null) );
+                                (selectedReasons !== undefined && selectedReasons !== null && selectedReasons.length > 0));
 
                 return result;
             };

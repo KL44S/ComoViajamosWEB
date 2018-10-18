@@ -1,4 +1,4 @@
-﻿function SelectOption(value, description, filtered) {
+﻿function SelectOption(value, description, filtered, selected) {
     if (value === undefined) {
         this.value = null;
     }
@@ -18,5 +18,12 @@
     }
     else {
         this.filtered = filtered;
+    }
+
+    if (selected === undefined) {
+        this.selected = false;
+    }
+    else {
+        this.selected = selected;
     }
 }

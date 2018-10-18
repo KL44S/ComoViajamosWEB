@@ -26,8 +26,8 @@
                 return reviewFeelingService.isFeelingValid(selectedFeeling);
             };
 
-            reviewService.isReasonValid = function (reasons, selectedReason) {
-                return reviewFeelingService.isReasonValid(reasons, selectedReason);
+            reviewService.isReasonValid = function (reasons, selectedReasons) {
+                return reviewFeelingService.isReasonValid(reasons, selectedReasons);
             };
 
             reviewService.getReviewFeelings = function () {
