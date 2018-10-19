@@ -146,6 +146,8 @@
     border: 2px solid black;
     border-radius: 2px;
     display: inline-block;
+    background-color: #353535;
+    color: white;
 }
 
 .custom-select.ng-invalid .select-select:not(.disabled) {
