@@ -1,0 +1,19 @@
+﻿<div class="date-picker">
+
+    <div class="month-picker">
+        <i class="icon-left" ng-click="previousMonth();"></i>
+        <strong>{{currentMonth.month.description + " de " + currentMonth.date.getYear()}}</strong>
+        <i class="icon-right" ng-click="nextMonth();"></i>
+    </div>
+
+    <div class="day-picker">
+        <div class="week">
+            <div class="day disabled" ng-repeat="day in days">{{day}}</div>
+        </div>
+
+        <div class="week" ng-repeat="week in currentMonth.weeks">
+            <div class="day" ng-repeat="day in week.days" ng-click="selectDate(day);" ng-class="{'selected': isDateSelected(day), 'disabled': mustDateBeDisabled(day)}">{{day ? day.getDate() : ""}}</div>
+        </div>
+    </div>
+
+</div>

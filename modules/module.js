@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var app = angular.module("CV", ['ngAnimate', 'angular-flatpickr']);
+    var app = angular.module("CV", ['ngAnimate', 'datetimePicker']);
 
     app.config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('errorInterceptor');
