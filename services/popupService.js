@@ -4,6 +4,8 @@
     app.factory("popupService", ["popupConstants", "$q", "$document", "$templateRequest", "$sce", "$compile", "$animate",
         function (popupConstants, $q, $document, $templateRequest, $sce, $compile, $animate) {
 
+        var mustDismiss = false;
+
         //privado
         function getProcessedParameters(parameters) {
             if (parameters.appendTo == undefined || parameters.appendTo == "" || parameters.appendTo == null) {
@@ -21,7 +23,7 @@
             parameters.scope.dismissPopup = popup.dismiss;
             parameters.scope.noneAction = function ($event) {
                 $event.preventDefault();
-                $event.stopPropagation();
+                mustDismiss = true;
             };
 
             return parameters;
@@ -32,7 +34,7 @@
             backgroundElement.addClass(popupConstants.backgroundClass);
 
             if (popup.config.isAutoDismissAvailable) {
-                backgroundElement.attr(popupConstants.ngClick, "dismissPopup();");
+                backgroundElement.attr(popupConstants.ngClick, "dismissPopup($event);");
             }
 
             return backgroundElement;
@@ -88,11 +90,16 @@
 
         popup.close = function (data) {
             finishPromise(popupConstants.resultTypes.close, data);
-        }
+        };
 
         popup.dismiss = function () {
-            finishPromise(popupConstants.resultTypes.dismiss);
-        }
+            if (!mustDismiss) {
+                finishPromise(popupConstants.resultTypes.dismiss);
+            }
+            else {
+                mustDismiss = false;
+            };
+        };
 
         //público
         var popupService = {};

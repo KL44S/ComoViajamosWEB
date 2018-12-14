@@ -499,6 +499,18 @@
                 transportTypes: 1
             };
 
+            $scope.datePickerFrom = {
+                date: undefined,
+                minDate: new Date(),
+                maxDate: new Date(2019, 11, 25)
+            };
+
+            $scope.datePickerUntil = {
+                date: undefined,
+                minDate: new Date(),
+                maxDate: new Date(2019, 11, 25)
+            };
+
             initSpinner();
 
             angular.element(document).ready(function () {

@@ -1,0 +1,93 @@
+﻿date-picker {
+    position: relative;
+}
+
+.date-picker {
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 15px;
+    background-color: white;
+    text-align: center;
+    width: 200px;
+    font-family: 'Open Sans', sans-serif;
+    position: absolute;
+    z-index: 99999999;
+}
+
+.month-picker {
+    margin-bottom: 15px;
+}
+
+.day-picker,
+.month-picker {
+    width: 100%;
+}
+
+.month-picker {
+    display: block;
+}
+
+.month-picker .month {
+  display: inline !important;
+  font-size: 13px;
+}
+
+.prev-month:hover,
+.next-month:hover {
+    cursor: pointer;
+}
+
+.prev-month {
+    float: left;
+}
+
+.next-month {
+    float: right;
+}
+
+.day-picker {
+    display: table;
+}
+
+.week {
+    display: table-row;
+}
+
+.day {
+    display: table-cell;
+    font-size: 11px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 50%;
+}
+
+.day.week-day {
+    font-weight: bold;
+}
+
+.day:hover {
+    cursor: pointer;
+}
+
+.day.disabled {
+    color: #AAA4A4;
+}
+
+.day.selected {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.day.today {
+    border: 1px solid black;
+}
+
+.day.disabled:hover,
+.day.selected:hover {
+    pointer-events: none;
+    cursor: default;  
+}

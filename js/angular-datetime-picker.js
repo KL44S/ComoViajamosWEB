@@ -9,6 +9,7 @@
                 picker: '='
             },
             link: function (scope, element, attrs) {
+                var monthAndDaySize = 2;
 
                 var months = [
                     "Enero",
@@ -38,17 +39,21 @@
                 };
 
                 function setMonth(month) {
-                    scope.currentMonth.date.setMonth(month);
-                    scope.currentMonth.month.number = month;
-                    scope.currentMonth.month.description = months[month];
-                    scope.currentMonth.weeks = getWeeks(month, scope.currentMonth.getYear());
+                    var newMonth = scope.currentMonth.date.getMonth() + month;
+                    scope.currentMonth.date.setMonth(newMonth);
+
+                    newMonth = scope.currentMonth.date.getMonth();
+
+                    scope.currentMonth.month.number = newMonth;
+                    scope.currentMonth.month.description = months[newMonth];
+                    scope.currentMonth.month.weeks = getWeeks(newMonth, scope.currentMonth.date.getFullYear());
                 };
 
                 function getWeeks(month, year) {
                     var isCurrentMonth = true;
                     var dayIndex = 1;
                     var maxDays = 31;
-                    var firstDayOfWeek = 1;
+                    var lastDayOfTheWeek = 0;
                     var sundayIndex = 7;
 
                     var weeks = [];
@@ -56,68 +61,112 @@
 
                     while (isCurrentMonth && dayIndex <= maxDays) {
                         var currentDay = new Date(year, month, dayIndex);
-
                         isCurrentMonth = (currentDay.getMonth() === month);
 
                         if (isCurrentMonth) {
                             var dayNumber = currentDay.getDay();
+                            var isLastDay = (dayNumber === lastDayOfTheWeek);
 
-                            if (dayNumber === firstDayOfWeek) {
-                                weeks.push(currentWeek);
-                                currentWeek = new Week();
-                            };
-
-                            if (dayNumber === 0) {
+                            if (isLastDay) {
                                 dayNumber = sundayIndex;
                             };
 
-                            currentWeek[dayNumber] = currentDay;
+                            currentWeek.days[dayNumber - 1] = currentDay;
+
+                            if (isLastDay) {
+                                weeks.push(currentWeek);
+                                currentWeek = new Week();
+                            }
+                            else if (dayIndex === maxDays) {
+                                weeks.push(currentWeek);
+                            };
+                        }
+                        else {
+                            weeks.push(currentWeek);
                         };
 
                         dayIndex++;
                     };
+
+                    return weeks;
                 };
 
+                function getZeroPaddingNumber(number, size) {
+                    var formattedNumber = number;
+
+                    while (formattedNumber.length < size) {
+                        formattedNumber = "0" + formattedNumber;
+                    };
+
+                    return formattedNumber;
+                };
+
+                function getSelectedDate(date) {
+                    var formattedDate = "";
+
+                    if (date) {
+                        formattedDate = getZeroPaddingNumber(date.getDate().toString(), monthAndDaySize) + "-"
+                                        + getZeroPaddingNumber(date.getMonth().toString(), monthAndDaySize) + "-"
+                                        + date.getFullYear();
+                    };
+
+                    return formattedDate;
+                };
+
+                function initDatePicker() {
+                    var month;
+                    var year;
+                    var date = scope.picker.date ? new Date(scope.picker.date.getFullYear(),
+                                                            scope.picker.date.getMonth(),
+                                                            scope.picker.date.getDate())
+                                    : new Date();
+
+                    scope.currentMonth = {
+                        date: date,
+                        month: {
+                            number: (date.getMonth() + 1),
+                            description: months[date.getMonth()],
+                            weeks: getWeeks(date.getMonth(), date.getFullYear())
+                        }
+                    };
+                };
+
+                scope.isDatePickerOpen = false;
+
                 scope.days = [
-                    "DO",
                     "LU",
                     "MA",
                     "MI",
                     "JU",
                     "VI",
-                    "SA"
+                    "SA",
+                    "DO"
                 ];
 
-                scope.currentMonth = {
-                    date: new date(scope.picker.date.getYear(), scope.picker.date.getMonth(), scope.picker.date.getDate()),
-                    month: {
-                        number: (scope.picker.date.getMonth() + 1),
-                        description: months[scope.picker.date.getMonth()]
-                    },
-                    weeks: getWeeks(scope.picker.date.getMonth(), scope.picker.date.getYear())
-                };
+                scope.selectedDate = getSelectedDate(scope.picker.date);
 
                 scope.nextMonth = function () {
-                    var newMonth = scope.currentMonth.date.getMonth() + 1;
-                    setMonth(newMonth);
+                    setMonth(1);
                 };
 
                 scope.previousMonth = function () {
-                    var newMonth = scope.currentMonth.date.getMonth() - 1;
-                    setMonth(newMonth);
+                    setMonth(-1);
                 };
 
                 scope.selectDate = function (date) {
                     if (date) {
-                        scope.picker.date = date;
+                        if (!scope.isDateSelected(date) && !scope.mustDateBeDisabled(date)) {
+                            scope.picker.date = date;
+                            scope.selectedDate = getSelectedDate(scope.picker.date);
+                        };
                     };
                 };
 
                 scope.isDateSelected = function (date) {
                     var isTheSameDate = false;
 
-                    if (date) {
-                        isTheSameDate = date.getYear() === scope.picker.date.getYear();
+                    if (date && scope.picker.date) {
+                        isTheSameDate = date.getFullYear() === scope.picker.date.getFullYear();
 
                         if (isTheSameDate) {
                             isTheSameDate = date.getMonth() === scope.picker.date.getMonth();
@@ -135,13 +184,16 @@
                     var mustBeDisabled = true;
 
                     if (date) {
-                        var stringCurrentDate = date.getYear().toString() + date.getMonth().toString() + date.getDate();
+                        var stringCurrentDate = date.getFullYear().toString() + getZeroPaddingNumber(date.getMonth().toString(), monthAndDaySize)
+                                                + getZeroPaddingNumber(date.getDate().toString(), monthAndDaySize);
 
-                        var stringMinDate = scope.picker.minDate.getYear().toString() + scope.picker.minDate.getMonth().toString()
-                                                + scope.picker.minDate.getDate();
+                        var stringMinDate = scope.picker.minDate.getFullYear().toString() 
+                                            + getZeroPaddingNumber(scope.picker.minDate.getMonth().toString(), monthAndDaySize)
+                                                + getZeroPaddingNumber(scope.picker.minDate.getDate().toString(), monthAndDaySize);
 
-                        var stringMaxDate = scope.picker.maxDate.getYear().toString() + scope.picker.maxDate.getMonth().toString()
-                            + scope.picker.maxDate.getDate();
+                        var stringMaxDate = scope.picker.maxDate.getFullYear().toString()
+                                            + getZeroPaddingNumber(scope.picker.maxDate.getMonth().toString(), monthAndDaySize)
+                                                + getZeroPaddingNumber(scope.picker.maxDate.getDate().toString(), monthAndDaySize);
 
                         var currentDate = parseInt(stringCurrentDate);
                         var minDate = parseInt(stringMinDate);
@@ -152,6 +204,41 @@
 
                     return mustBeDisabled;
                 };
+
+                scope.isToday = function (date) {
+                    var isDateToday = false;
+
+                    if (date) {
+                        var today = new Date();
+
+                        isDateToday = ((today.getFullYear() === date.getFullYear())
+                                            && (today.getMonth() === date.getMonth())
+                                            && (today.getDate() === date.getDate()));
+                    };
+
+                    return isDateToday;
+
+                };
+
+                scope.openDatePicker = function ($event) {
+                    $event.stopPropagation();
+
+                    scope.isDatePickerOpen = true;
+                    initDatePicker();
+                };
+
+                window.onclick = function ($event) {
+                    var clickedElement = angular.element($event.target);
+                    var clickableClass = "date-picker-clickable";
+
+                    if (!clickedElement.hasClass(clickableClass) && scope.isDatePickerOpen) {
+                        scope.isDatePickerOpen = false;
+
+                        scope.$apply();
+                    };
+                };
+
+                initDatePicker();
             }
         };
     });

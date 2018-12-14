@@ -1,18 +1,25 @@
-﻿<div class="date-picker">
+﻿<input class="form-input" ng-class="{'ng-invalid': form.dateUntil.isInvalid}" placeholder="Fecha" ng-model="selectedDate" ng-click="openDatePicker($event);" type="text"/>
+<i class="icon-calendar-1 date"></i>
 
-    <div class="month-picker">
-        <i class="icon-left" ng-click="previousMonth();"></i>
-        <strong>{{currentMonth.month.description + " de " + currentMonth.date.getYear()}}</strong>
-        <i class="icon-right" ng-click="nextMonth();"></i>
-    </div>
+<div ng-if="isDatePickerOpen" class="date-picker date-picker-clickable">
 
-    <div class="day-picker">
-        <div class="week">
-            <div class="day disabled" ng-repeat="day in days">{{day}}</div>
+    <div class="month-picker date-picker-clickable">
+        <i class="icon-left prev-month date-picker-clickable" ng-click="previousMonth();"><</i>
+
+        <div class="month date-picker-clickable">
+            <strong class="date-picker-clickable">{{currentMonth.month.description + " de " + currentMonth.date.getFullYear()}}</strong>
         </div>
 
-        <div class="week" ng-repeat="week in currentMonth.weeks">
-            <div class="day" ng-repeat="day in week.days" ng-click="selectDate(day);" ng-class="{'selected': isDateSelected(day), 'disabled': mustDateBeDisabled(day)}">{{day ? day.getDate() : ""}}</div>
+        <i class="icon-right next-month date-picker-clickable" ng-click="nextMonth();">></i>
+    </div>
+
+    <div class="day-picker date-picker-clickable">
+        <div class="week date-picker-clickable">
+            <div class="day week-day disabled date-picker-clickable" ng-repeat="day in days">{{day}}</div>
+        </div>
+
+        <div class="week date-picker-clickable" ng-repeat="week in currentMonth.month.weeks">
+            <div class="day date-picker-clickable" ng-repeat="day in week.days track by $index" ng-click="selectDate(day);" ng-class="{'today': isToday(day) ,'selected': isDateSelected(day), 'disabled': mustDateBeDisabled(day)}">{{day ? day.getDate() : ""}}</div>
         </div>
     </div>
 
