@@ -1,25 +1,25 @@
-﻿<input class="form-input" ng-class="{'ng-invalid': form.dateUntil.isInvalid}" placeholder="Fecha" ng-model="selectedDate" ng-click="openDatePicker($event);" type="text"/>
-<i class="icon-calendar-1 date"></i>
+﻿<input readonly class="form-input" ng-class="{'ng-invalid': form.dateUntil.isInvalid}" placeholder="Fecha" ng-model="vm.selectedDate" ng-click="vm.openDatePicker($event);" type="text"/>
+<i ng-click="vm.openDatePicker($event);" class="icon-calendar-1 date"></i>
 
-<div ng-if="isDatePickerOpen" class="date-picker date-picker-clickable">
+<div ng-if="vm.isDatePickerOpen()" class="date-picker date-picker-clickable{{vm.datePickerIndex}}">
 
-    <div class="month-picker date-picker-clickable">
-        <i class="icon-left prev-month date-picker-clickable" ng-click="previousMonth();"><</i>
+    <div class="month-picker date-picker-clickable{{vm.datePickerIndex}}">
+        <i class="icon-left prev-month date-picker-clickable{{vm.datePickerIndex}}" ng-click="vm.previousMonth();"><</i>
 
-        <div class="month date-picker-clickable">
-            <strong class="date-picker-clickable">{{currentMonth.month.description + " de " + currentMonth.date.getFullYear()}}</strong>
+        <div class="month date-picker-clickable{{vm.datePickerIndex}}">
+            <strong class="date-picker-clickable{{vm.datePickerIndex}}">{{vm.currentMonth.month.description + " de " + vm.currentMonth.date.getFullYear()}}</strong>
         </div>
 
-        <i class="icon-right next-month date-picker-clickable" ng-click="nextMonth();">></i>
+        <i class="icon-right next-month date-picker-clickable{{vm.datePickerIndex}}" ng-click="vm.nextMonth();">></i>
     </div>
 
-    <div class="day-picker date-picker-clickable">
-        <div class="week date-picker-clickable">
-            <div class="day week-day disabled date-picker-clickable" ng-repeat="day in days">{{day}}</div>
+    <div class="day-picker date-picker-clickable{{vm.datePickerIndex}}">
+        <div class="week date-picker-clickable{{vm.datePickerIndex}}">
+            <div class="day week-day disabled date-picker-clickable{{vm.datePickerIndex}}" ng-repeat="day in vm.days">{{day}}</div>
         </div>
 
-        <div class="week date-picker-clickable" ng-repeat="week in currentMonth.month.weeks">
-            <div class="day date-picker-clickable" ng-repeat="day in week.days track by $index" ng-click="selectDate(day);" ng-class="{'today': isToday(day) ,'selected': isDateSelected(day), 'disabled': mustDateBeDisabled(day)}">{{day ? day.getDate() : ""}}</div>
+        <div class="week date-picker-clickable{{vm.datePickerIndex}}" ng-repeat="week in vm.currentMonth.month.weeks">
+            <div class="day date-picker-clickable{{vm.datePickerIndex}}" ng-repeat="day in week.days track by $index" ng-click="vm.selectDate(day);" ng-class="{'today': vm.isToday(day) ,'selected': vm.isDateSelected(day), 'disabled': vm.mustDateBeDisabled(day)}">{{day ? day.getDate() : ""}}</div>
         </div>
     </div>
 

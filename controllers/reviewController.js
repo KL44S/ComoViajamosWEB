@@ -3,8 +3,9 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService", "spinnerService", "$window",
-        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window) {
+        "reviewService", "spinnerService", "$window", "datetimeService",
+        function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window,
+            datetimeService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -71,146 +72,6 @@
                 };
 
                 return formatJsTime(now);
-            };
-
-            function initDates() {
-                function areDatesEquals(dateFrom, dateUntil) {
-                    if (dateFrom === undefined) {
-                        dateFrom = $scope.dateFrom;
-                    };
-
-                    if (dateUntil === undefined) {
-                        dateUntil = $scope.dateUntil;
-                    };
-
-                    return (dateFrom == dateUntil);
-                };
-
-                function updateTimeUntil(dateFrom, dateUntil) {
-                    if (areDatesEquals(dateFrom, dateUntil)) {
-                        timeUntilInstance.set("minTime", $scope.timeFrom);
-                    }
-                    else {
-                        timeUntilInstance.set("minTime", undefined);
-                    };
-                };
-
-                function updateTimeFrom(dateFrom, dateUntil) {
-                    if (areDatesEquals(dateFrom, dateUntil)) {
-                        timeFromInstance.set("maxTime", $scope.timeUntil);
-                    }
-                    else {
-                        timeFromInstance.set("maxTime", undefined);
-                    };
-                };
-
-                function updateTimes(dateFrom, dateUntil) {
-                    updateTimeUntil(dateFrom, dateUntil);
-                    updateTimeFrom(dateFrom, dateUntil);                   
-                };
-
-                //fechas
-                var dateFormat = reviewConstants.dateFormat;
-                var timeFormat = reviewConstants.timeFormat;
-                var today = 'today';
-
-                var dateFromInstance;
-                var dateUntilInstance;
-                var timeFromInstance;
-                var timeUntilInstance;
-
-                var now = new Date();
-                var formattedToday = formatJsDate(now);
-
-
-                $scope.dateFrom = formattedToday;
-                $scope.dateUntil = formattedToday;
-                $scope.timeUntil = formatJsTime(now);
-                $scope.timeFrom = getFromTime(now);
-
-                $scope.dateFromOptions = {
-                    dateFormat: dateFormat,
-                    defaultDate: today,
-                    maxDate: today,
-                    onChange: function (selectedDates, dateStr, instance) {
-                        dateUntilInstance.set("minDate", instance.parseDate(dateStr, dateFormat));
-
-                        var dateFrom = formatJsDate(selectedDates[0]);
-                        updateTimes(dateFrom, $scope.dateUntil);
-
-                        $scope.timeFrom = "";
-
-                        $scope.form.dateFrom.isInvalid = false;
-                        $scope.form.timeFrom.isInvalid = true;
-
-                        console.log(selectedDates);
-                    },
-                    onReady: function (selectedDates, dateStr, instance) {
-                        dateFromInstance = instance;
-                    }
-                };
-
-                $scope.dateUntilOptions = {
-                    dateFormat: dateFormat,
-                    defaultDate: today,
-                    minDate: today,
-                    onChange: function (selectedDates, dateStr, instance) {
-                        dateFromInstance.set("maxDate", instance.parseDate(dateStr, dateFormat));
-
-                        var dateUntil = formatJsDate(selectedDates[0]);
-                        updateTimes($scope.dateFrom, dateUntil);
-
-                        $scope.timeUntil = "";
-
-                        $scope.form.dateUntil.isInvalid = false;
-                        $scope.form.timeUntil.isInvalid = true;
-
-                        console.log(selectedDates);
-                    },
-                    onReady: function (selectedDates, dateStr, instance) {
-                        dateUntilInstance = instance;
-                    }
-                };
-
-                $scope.timeFromOptions = {
-                    enableTime: true,
-                    noCalendar: true,
-                    dateFormat: timeFormat,
-                    maxTime: $scope.timeUntil,
-                    defaultDate: $scope.timeFrom,
-                    time_24hr: true,
-                    onChange: function (selectedDates, dateStr, instance) {
-                        updateTimeUntil();
-                        $scope.form.timeFrom.isInvalid = false;
-
-                        console.log(selectedDates);
-                    },
-                    onReady: function (selectedDates, dateStr, instance) {
-                        timeFromInstance = instance;
-                    }
-                };
-
-                $scope.timeUntilOptions = {
-                    enableTime: true,
-                    noCalendar: true,
-                    dateFormat: timeFormat,
-                    minTime: $scope.timeFrom,
-                    defaultDate: $scope.timeUntil,
-                    time_24hr: true,
-                    onChange: function (selectedDates, dateStr, instance) {
-                        updateTimeFrom();
-                        $scope.form.timeUntil.isInvalid = false;
-
-                        console.log(selectedDates);
-                    },
-                    onReady: function (selectedDates, dateStr, instance) {
-                        timeUntilInstance = instance;
-                    }
-                };
-
-                $scope.datePostSetup = function (fpItem) {
-                    //console.log('flatpickr', fpItem);
-                };
             };
 
             function initReviewForm() {
@@ -488,6 +349,37 @@
                 };
             };
 
+            function initDatePicker() {
+                $scope.datePickerFrom = new DatePicker();
+                $scope.datePickerUntil = new DatePicker();
+
+                $scope.dateFromHasChanged = function () {
+                    $scope.datePickerUntil.minDate = $scope.datePickerFrom.date;
+
+                    if ($scope.datePickerUntil.date) {
+                        var comparisonResult = datetimeService.compareDates($scope.datePickerFrom.date, $scope.datePickerUntil.date);
+
+                        if (comparisonResult > 0) {
+                            $scope.datePickerUntil.date = undefined;
+                        };
+                    };
+
+                };
+
+                $scope.dateUntilHasChanged = function () {
+                    $scope.datePickerFrom.maxDate = $scope.datePickerUntil.date;
+
+                    if ($scope.datePickerFrom.date) {
+                        var comparisonResult = datetimeService.compareDates($scope.datePickerUntil.date, $scope.datePickerFrom.date);
+
+                        if (comparisonResult < 0) {
+                            $scope.datePickerFrom.date = undefined;
+                        };
+                    };
+
+                };
+            };
+
             //público
             $scope.loadingNecessaryElements = [
                 false,
@@ -499,18 +391,6 @@
                 transportTypes: 1
             };
 
-            $scope.datePickerFrom = {
-                date: undefined,
-                minDate: new Date(),
-                maxDate: new Date(2019, 11, 25)
-            };
-
-            $scope.datePickerUntil = {
-                date: undefined,
-                minDate: new Date(),
-                maxDate: new Date(2019, 11, 25)
-            };
-
             initSpinner();
 
             angular.element(document).ready(function () {
@@ -518,7 +398,7 @@
             });
 
             loadTransportTypes();
-            initDates();
+            initDatePicker();
             initReviewForm();
         }]);
 
