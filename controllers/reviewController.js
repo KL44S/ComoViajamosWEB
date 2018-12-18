@@ -313,11 +313,21 @@
             };
 
             function loadCaptcha() {
-                grecaptcha.render('recaptcha', {
-                    'callback': captchaWasSuccessed,
-                    'expiredCallback': captchaWasExpired,
-                    'errorCallback': captchaWasExcepted
+                grecaptcha.ready(function () {
+                    grecaptcha.render('recaptcha', {
+                        'callback': captchaWasSuccessed,
+                        'expiredCallback': captchaWasExpired,
+                        'errorCallback': captchaWasExcepted
+                    });
+
+                    //grecaptcha.execute('reCAPTCHA_6Ldv8oIUAAAAAMfDqFJuPS1laYDUGMfneQ_2omT9', { action: 'homepage' }).then(function (token) {
+                    //    console.log(token);
+                    //    $scope.form.captcha.isInvalid = false;
+                    //    $scope.review.captchaToken = token;
+                    //});
                 });
+
+
 
                 $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
                 tryHideSpinner();
