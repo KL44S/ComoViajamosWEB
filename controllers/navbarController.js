@@ -7,7 +7,6 @@
         $scope.isSidebarOpen = false;
         $scope.options = [
             new NavbarOption("#", "ESTADÍSTICAS"),
-            new NavbarOption("#", "APP"),
             new NavbarOption("#", "INFO"),
         ];
 
