@@ -1,18 +1,33 @@
-﻿date-picker {
+﻿date-picker,
+time-picker {
     position: relative;
 }
 
-.date-picker {
+.date-picker,
+.time-picker {
     text-align: center;
     border: 2px solid black;
     border-radius: 3px;
-    padding: 15px;
     background-color: white;
     text-align: center;
-    width: 200px;
     font-family: 'Open Sans', sans-serif;
-    position: absolute;
     z-index: 99999999;
+    margin-top: -2px;
+}
+
+.date-picker {
+    width: 200px;
+    padding: 15px;
+}
+
+.time-picker {
+    width: 90px;
+    padding: 10px;
+}
+
+.date-picker,
+.time-picker-wrapper {
+    position: absolute;
 }
 
 .month-picker {
@@ -90,4 +105,59 @@
 .day.selected:hover {
     pointer-events: none;
     cursor: default;  
+}
+
+.time-picker {
+    position: relative;
+    float: right;
+}
+
+.time-picker-wrapper {
+    left: 0;
+}
+
+.form-input.ng-invalid,
+.form-input.ng-invalid + i.date,
+.form-input.ng-invalid + i.time {
+    color: #EC6347;
+}
+
+i.date,
+i.time {
+    margin-left: -36px;
+}
+
+.hours-picker,
+.minutes-picker {
+    width: 30%;
+    height: 30%;
+    border: none;
+    outline: none;
+}
+
+.hours-picker:hover,
+.minutes-picker:hover,
+.hours-picker:focus,
+.minutes-picker:focus {
+    border-bottom: 1px solid black;
+}
+
+.hours-picker {
+    text-align: right;
+}
+
+.minutes-picker {
+    text-align: left;
+}
+
+.hours-picker::-webkit-outer-spin-button,
+.hours-picker::-webkit-inner-spin-button,
+.minutes-picker::-webkit-outer-spin-button,
+.minutes-picker::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.time-separator {
+    margin-left: 2px;
+    margin-right: 2px;
 }

@@ -83,12 +83,6 @@
     color: #EC6347;
 }
 
-.form-input.ng-invalid,
-.form-input.ng-invalid + i.date,
-.form-input.ng-invalid + i.time {
-    color: #EC6347;
-}
-
 .form-input::-webkit-input-placeholder {
     color: #EE7C7F !important;
     font-size: 12px;
@@ -111,11 +105,6 @@
 
 .moment-picker {
     z-index: 90999999 !important;
-}
-
-i.date,
-i.time {
-    margin-left: -35px;
 }
 
 #recaptcha {

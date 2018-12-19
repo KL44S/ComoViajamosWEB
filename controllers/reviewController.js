@@ -319,12 +319,6 @@
                         'expiredCallback': captchaWasExpired,
                         'errorCallback': captchaWasExcepted
                     });
-
-                    //grecaptcha.execute('reCAPTCHA_6Ldv8oIUAAAAAMfDqFJuPS1laYDUGMfneQ_2omT9', { action: 'homepage' }).then(function (token) {
-                    //    console.log(token);
-                    //    $scope.form.captcha.isInvalid = false;
-                    //    $scope.review.captchaToken = token;
-                    //});
                 });
 
 
@@ -360,8 +354,8 @@
             };
 
             function initDatePicker() {
-                $scope.datePickerFrom = new DatePicker();
-                $scope.datePickerUntil = new DatePicker();
+                $scope.datePickerFrom = new DatePicker(new Date(), undefined, new Date());
+                $scope.datePickerUntil = new DatePicker(new Date(), new Date(), undefined);
 
                 $scope.dateFromHasChanged = function () {
                     $scope.datePickerUntil.minDate = $scope.datePickerFrom.date;
@@ -377,6 +371,42 @@
                 };
 
                 $scope.dateUntilHasChanged = function () {
+                    $scope.datePickerFrom.maxDate = $scope.datePickerUntil.date;
+
+                    if ($scope.datePickerFrom.date) {
+                        var comparisonResult = datetimeService.compareDates($scope.datePickerUntil.date, $scope.datePickerFrom.date);
+
+                        if (comparisonResult < 0) {
+                            $scope.datePickerFrom.date = undefined;
+                        };
+                    };
+
+                };
+            };
+
+            function initTimePicker() {
+                var now = new Date();
+
+                var timeAgo = new Date();
+                timeAgo.setMinutes(now.getMinutes() - reviewConstants.minutesBetweeness);
+
+                $scope.timePickerFrom = new TimePicker(timeAgo, undefined, now);
+                $scope.timePickerUntil = new TimePicker(now, timeAgo);
+
+                $scope.timeFromHasChanged = function () {
+                    $scope.datePickerUntil.minDate = $scope.datePickerFrom.date;
+
+                    if ($scope.datePickerUntil.date) {
+                        var comparisonResult = datetimeService.compareDates($scope.datePickerFrom.date, $scope.datePickerUntil.date);
+
+                        if (comparisonResult > 0) {
+                            $scope.datePickerUntil.date = undefined;
+                        };
+                    };
+
+                };
+
+                $scope.timeUntilHasChanged = function () {
                     $scope.datePickerFrom.maxDate = $scope.datePickerUntil.date;
 
                     if ($scope.datePickerFrom.date) {
@@ -409,6 +439,7 @@
 
             loadTransportTypes();
             initDatePicker();
+            initTimePicker();
             initReviewForm();
         }]);
 

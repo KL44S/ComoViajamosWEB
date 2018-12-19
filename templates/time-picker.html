@@ -1,0 +1,11 @@
+﻿<input readonly class="form-input" ng-class="{'ng-invalid': form.timeUntil.isInvalid}" placeholder="Hora" ng-model="vm.selectedTime.description" ng-click="vm.openTimePicker($event);" type="text" />
+<i ng-click="vm.openTimePicker($event);" class="icon-clock time"></i>
+
+<div ng-if="vm.isTimePickerOpen()" class="time-picker-wrapper time-picker-clickable{{vm.timePickerIndex}}">
+
+    <div class="time-picker time-picker-clickable{{vm.timePickerIndex}}">
+        <input type="number" ng-model="vm.selectedTime.time.hours" ng-blur="vm.updateHours();" class="hours-picker time-picker-clickable{{vm.timePickerIndex}}" />
+        <span class="time-separator">:</span>
+        <input type="number" ng-model="vm.selectedTime.time.minutes" ng-blur="vm.updateMinutes();" class="minutes-picker time-picker-clickable{{vm.timePickerIndex}}" />
+    </div>
+</div>

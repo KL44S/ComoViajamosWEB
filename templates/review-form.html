@@ -45,19 +45,13 @@
                     <div class="subform-block">
                         <label class="label-input">Desde<span class="required"></span></label>
                         <date-picker picker="datePickerFrom" callback="dateFromHasChanged()"></date-picker>
-                        <!--<input class="form-input" ng-class="{'ng-invalid': form.dateFrom.isInvalid}" placeholder="Fecha" ng-flatpickr fp-opts="dateFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateFrom">
-                        <i class="icon-calendar-1 date"></i>-->
-                        <input class="form-input" ng-class="{'ng-invalid': form.timeFrom.isInvalid}" placeholder="Hora" ng-flatpickr fp-opts="timeFromOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeFrom">
-                        <i class="icon-clock time"></i>
+                        <time-picker picker="timePickerFrom" callback="timeFromHasChanged()"></time-picker>
                     </div>
 
                     <div class="subform-block">
                         <label class="label-input">Hasta<span class="required"></span></label>
                         <date-picker picker="datePickerUntil" callback="dateUntilHasChanged()"></date-picker>
-                        <!--<input class="form-input" ng-class="{'ng-invalid': form.dateUntil.isInvalid}" placeholder="Fecha" ng-flatpickr fp-opts="dateUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="dateUntil">
-                        <i class="icon-calendar-1 date"></i>-->
-                        <input class="form-input" ng-class="{'ng-invalid': form.timeUntil.isInvalid}" placeholder="Hora" ng-flatpickr fp-opts="timeUntilOptions" fp-on-setup="datePostSetup(fpItem)" ng-model="timeUntil">
-                        <i class="icon-clock time"></i>
+                        <time-picker picker="timePickerUntil" callback="timeUntilHasChanged()"></time-picker>
                     </div>
 
                 </div>

@@ -3,8 +3,6 @@
 
     app.factory("datetimeService", function () {
 
-        var monthAndDaySize = 2;
-
         function getZeroPaddingNumber(number, size) {
             var formattedNumber = number;
 

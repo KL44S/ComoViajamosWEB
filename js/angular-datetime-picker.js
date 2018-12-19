@@ -12,8 +12,25 @@
     this.maxDate = maxDate;
 };
 
+function TimePicker(time, minTime, maxTime) {
+    this.minTime = minTime;
+    this.maxTime = maxTime;
+    this.time = time;
+};
+
 (function () {
+    function getZeroPaddingNumber(number, size) {
+        var formattedNumber = number;
+
+        while (formattedNumber.length < size) {
+            formattedNumber = "0" + formattedNumber;
+        };
+
+        return formattedNumber;
+    };
+
     var datePickers = [];
+    var timePickers = [];
 
     var app = angular.module('datetimePicker', []);
 
@@ -23,6 +40,7 @@
             var vm = this;
 
             var monthAndDaySize = 2;
+            var dateSeparator = "-";
 
             var months = [
                 "Enero",
@@ -104,22 +122,12 @@
                 return weeks;
             };
 
-            function getZeroPaddingNumber(number, size) {
-                var formattedNumber = number;
-
-                while (formattedNumber.length < size) {
-                    formattedNumber = "0" + formattedNumber;
-                };
-
-                return formattedNumber;
-            };
-
             function getSelectedDate(date) {
                 var formattedDate = "";
 
                 if (date) {
-                    formattedDate = getZeroPaddingNumber(date.getDate().toString(), monthAndDaySize) + "-"
-                                    + getZeroPaddingNumber((date.getMonth() + 1).toString(), monthAndDaySize) + "-"
+                    formattedDate = getZeroPaddingNumber(date.getDate().toString(), monthAndDaySize) + dateSeparator
+                                    + getZeroPaddingNumber((date.getMonth() + 1).toString(), monthAndDaySize) + dateSeparator
                                     + date.getFullYear();
                 };
 
@@ -264,13 +272,24 @@
 
             window.onclick = function ($event) {
                 var somethingHasChanged = false;
+                var clickedElement = angular.element($event.target);
+                var clickableClass = "";
 
-                for (var i = 0; i < datePickers.length; i++) {
-                    var clickedElement = angular.element($event.target);
-                    var clickableClass = "date-picker-clickable" + i;
+                for (var i = 0; i < timePickers.length; i++) {
+                    clickableClass = "time-picker-clickable" + i;
 
-                    if (!clickedElement.hasClass(clickableClass) && datePickers[i].isDatePickerOpen) {
-                        datePickers[i].isDatePickerOpen = false;
+                    if (!clickedElement.hasClass(clickableClass) && timePickers[i].isTimePickerOpen) {
+
+                        timePickers[i].isTimePickerOpen = false;
+                        somethingHasChanged = true;
+                    };
+                };
+
+                for (var j = 0; j < datePickers.length; j++) {
+                    clickableClass = "date-picker-clickable" + j;
+
+                    if (!clickedElement.hasClass(clickableClass) && datePickers[j].isDatePickerOpen) {
+                        datePickers[j].isDatePickerOpen = false;
                         somethingHasChanged = true;
                     };
                 };
@@ -298,16 +317,172 @@
     });
 
     app.directive('timePicker', function () {
+        var controller = function ($scope) {
+
+            function CustomTime(hours, minutes) {
+                this.hours = hours;
+                this.minutes = minutes;
+            };
+
+            function SelectedTime(time) {
+                if (time !== undefined) {
+                    this.time = new CustomTime(time.getHours(), time.getMinutes());
+                    this.description = getSelectedTime(time);
+                }
+                else {
+                    this.time = new CustomTime();
+                    this.description = "";
+                };
+            };
+
+            var vm = this;
+
+            var minutesAndSecondsSize = 2;
+            var minHour = 0;
+            var maxHour = 23;
+            var minMinutes = 0;
+            var maxMinutes = 59;
+            var timeSeparator = ":";
+
+            function getSelectedTime(time) {
+                var selectedTime = {
+
+                };
+                var formattedTime = "";
+
+                if (time) {
+                    formattedTime = getZeroPaddingNumber(time.getHours().toString(), minutesAndSecondsSize) + timeSeparator
+                                    + getZeroPaddingNumber(time.getMinutes().toString(), minutesAndSecondsSize);
+                };
+
+                return formattedTime;
+            };
+
+            function init() {
+                timePickers.push({
+                    isTimePickerOpen: false
+                });
+                vm.timePickerIndex = (timePickers.length - 1);
+
+                $scope.$watch("picker", function (newValue, oldValue) {
+
+                    if (newValue.time !== oldValue.time) {
+                        vm.selectedTime = new SelectedTime($scope.picker.time);
+                    };
+                });
+            };
+
+            function isTheTimeValid(time) {
+                var result = false;
+
+                if (time.hours && time.minutes) {
+                    result = (time.hours >= minHour && time.hours <= maxHour);
+                    result = (result & (time.minutes >= minMinutes && time.minutes <= maxMinutes));
+
+                    if (result) {
+                        var formattedTime = getZeroPaddingNumber(time.hours.toString(), minutesAndSecondsSize)
+                            + getZeroPaddingNumber(time.minutes.toString(), minutesAndSecondsSize);
+
+                        var formattedMinTime = "0000";
+                        if ($scope.picker.minTime) {
+                            formattedMinTime = getZeroPaddingNumber($scope.picker.minTime.getHours().toString(), minutesAndSecondsSize)
+                                                + getZeroPaddingNumber($scope.picker.minTime.getMinutes().toString(), minutesAndSecondsSize);
+                        };
+
+                        var formattedMaxTime = "2359";
+                        if ($scope.picker.maxTime) {
+                            formattedMaxTime = getZeroPaddingNumber($scope.picker.maxTime.getHours().toString(), minutesAndSecondsSize)
+                                                    + getZeroPaddingNumber($scope.picker.maxTime.getMinutes().toString(), minutesAndSecondsSize);
+                        };
+
+                        var fullTime = parseInt(formattedTime);
+                        var minTime = parseInt(formattedMinTime);
+                        var maxTime = parseInt(formattedMaxTime);
+
+                        result = (fullTime >= minTime && fullTime <= maxTime);
+                    };
+
+                };
+
+                return result;
+            };
+
+            vm.updateHours = function () {
+                if (isTheTimeValid(vm.selectedTime.time)) {
+                    $scope.picker.time.setHours(vm.selectedTime.time.hours);
+                    $scope.callback();
+                };
+
+                vm.selectedTime = new SelectedTime($scope.picker.time);
+            };
+
+            vm.updateMinutes = function () {
+                if (isTheTimeValid(vm.selectedTime.time)) {
+                    $scope.picker.time.setMinutes(vm.selectedTime.time.minutes);
+                    $scope.callback();
+                };
+
+                vm.selectedTime = new SelectedTime($scope.picker.time);
+            };
+
+            vm.selectedTime = new SelectedTime($scope.picker.time);
+
+            vm.isTimePickerOpen = function () {
+                return timePickers[vm.timePickerIndex].isTimePickerOpen;
+            };
+
+            vm.openTimePicker = function ($event) {
+                if (!vm.isTimePickerOpen()) {
+                    $event.stopPropagation();
+
+                    timePickers[vm.timePickerIndex].isTimePickerOpen = true;
+                    //initDatePicker();
+                };
+            };
+
+            window.onclick = function ($event) {
+                var somethingHasChanged = false;
+                var clickedElement = angular.element($event.target);
+                var clickableClass = "";
+
+                for (var i = 0; i < timePickers.length; i++) {
+                    clickableClass = "time-picker-clickable" + i;
+
+                    if (!clickedElement.hasClass(clickableClass) && timePickers[i].isTimePickerOpen) {
+
+                        timePickers[i].isTimePickerOpen = false;
+                        somethingHasChanged = true;
+                    };
+                };
+
+                for (var j = 0; j < datePickers.length; j++) {
+                    clickableClass = "date-picker-clickable" + j;
+
+                    if (!clickedElement.hasClass(clickableClass) && datePickers[j].isDatePickerOpen) {
+                        datePickers[j].isDatePickerOpen = false;
+                        somethingHasChanged = true;
+                    };
+                };
+
+                if (somethingHasChanged) {
+                    $scope.$apply();
+                };
+
+            };
+
+            init();
+
+        };
+
         return {
             restrict: 'E',
             templateUrl: 'templates/time-picker.html',
-            replace: true,
             scope: {
-                timePicker: '='
+                picker: '=',
+                callback: '&'
             },
-            link: function (scope, element, attrs) {
-
-            }
+            controller: controller,
+            controllerAs: 'vm'
         };
     });
 
