@@ -365,11 +365,10 @@ function TimePicker(time, minTime, maxTime) {
                 vm.timePickerIndex = (timePickers.length - 1);
 
                 $scope.$watch("picker", function (newValue, oldValue) {
-
                     if (newValue.time !== oldValue.time) {
                         vm.selectedTime = new SelectedTime($scope.picker.time);
                     };
-                });
+                }, true);
             };
 
             function isTheTimeValid(time) {

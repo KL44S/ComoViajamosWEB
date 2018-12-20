@@ -18,7 +18,7 @@
                 if (selectedOption !== undefined) {
                     entity.id = selectedOption.value;
                     entity.description = selectedOption.description;
-                };            
+                };
             };
 
             function addZeroIfItIsNecessary(number) {
@@ -102,7 +102,7 @@
                         var isTimeUntilValid = reviewService.isDatetimeValid($scope.timeUntil);
 
                         var areDatetimesValid = reviewService.areDatetimesValid(new CustomDatetime($scope.dateFrom, $scope.timeFrom),
-                                                                                new CustomDatetime($scope.dateUntil, $scope.timeUntil));
+                            new CustomDatetime($scope.dateUntil, $scope.timeUntil));
 
                         this.dateFrom.isInvalid = !(isDateFromValid && areDatetimesValid);
                         this.dateUntil.isInvalid = !(isDateUntilvalid && areDatetimesValid);
@@ -330,7 +330,7 @@
             function loadTransportTypes() {
                 transportService.getTransportTypes().then(function (transportTypes) {
                     $scope.transportTypes = transportTypes;
-                    
+
                     $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.transportTypes] = true;
                     tryHideSpinner();
                 });
@@ -339,7 +339,7 @@
             function tryHideSpinner() {
                 var allRight = true;
                 var index = 0;
-                var loadingElementsLength =  $scope.loadingNecessaryElements.length;
+                var loadingElementsLength = $scope.loadingNecessaryElements.length;
 
                 while (allRight && index < loadingElementsLength) {
                     var currentLoadingElement = $scope.loadingNecessaryElements[index];
@@ -351,6 +351,13 @@
                 if (allRight) {
                     spinnerService.hideSpinner($scope.containerId);
                 };
+            };
+
+            function removeRestrictionTimes() {
+                $scope.timePickerFrom.minTime = undefined;
+                $scope.timePickerFrom.maxTime = undefined;
+                $scope.timePickerUntil.minTime = undefined;
+                $scope.timePickerUntil.maxTime = undefined;
             };
 
             function initDatePicker() {
@@ -365,6 +372,12 @@
 
                         if (comparisonResult > 0) {
                             $scope.datePickerUntil.date = undefined;
+                        }
+                        else if (comparisonResult === 0) {
+                            $scope.timeUntilHasChanged();
+                        }
+                        else {
+                            removeRestrictionTimes();
                         };
                     };
 
@@ -378,45 +391,72 @@
 
                         if (comparisonResult < 0) {
                             $scope.datePickerFrom.date = undefined;
+                        }
+                        else if (comparisonResult === 0) {
+                            $scope.timeFromHasChanged();
+                        }
+                        else {
+                            removeRestrictionTimes();
                         };
                     };
 
                 };
             };
 
+            function addMinutesInaNewTime(time, minutes) {
+                var newTime = new Date();
+                newTime.setHours(time.getHours());
+                newTime.setMinutes(time.getMinutes() + minutes);
+
+                return newTime;
+            };
+
+            function buildAndGetTimeLater(time) {
+                return addMinutesInaNewTime(time, reviewConstants.minutesBetweeness);
+            };
+
+            function buildAndGetTimeAgo(time) {
+                return addMinutesInaNewTime(time, -(reviewConstants.minutesBetweeness));
+            };
+
             function initTimePicker() {
                 var now = new Date();
-
-                var timeAgo = new Date();
-                timeAgo.setMinutes(now.getMinutes() - reviewConstants.minutesBetweeness);
+                var timeAgo = buildAndGetTimeAgo(now);
 
                 $scope.timePickerFrom = new TimePicker(timeAgo, undefined, now);
                 $scope.timePickerUntil = new TimePicker(now, timeAgo);
 
                 $scope.timeFromHasChanged = function () {
-                    $scope.datePickerUntil.minDate = $scope.datePickerFrom.date;
-
-                    if ($scope.datePickerUntil.date) {
+                    if ($scope.timePickerFrom.time && $scope.datePickerUntil.date && $scope.timePickerUntil.time) {
                         var comparisonResult = datetimeService.compareDates($scope.datePickerFrom.date, $scope.datePickerUntil.date);
 
-                        if (comparisonResult > 0) {
-                            $scope.datePickerUntil.date = undefined;
-                        };
-                    };
+                        if (comparisonResult === 0) {
+                            $scope.timePickerUntil.minTime = $scope.timePickerFrom.time;
 
+
+                            comparisonResult = datetimeService.compareTimes($scope.timePickerFrom.time, $scope.timePickerUntil.time);
+
+                            if (comparisonResult > 0) {
+                                $scope.timePickerUntil.time = buildAndGetTimeLater($scope.timePickerFrom.time);
+                            };
+                        };
+                    };                   
                 };
 
                 $scope.timeUntilHasChanged = function () {
-                    $scope.datePickerFrom.maxDate = $scope.datePickerUntil.date;
+                    if ($scope.timePickerUntil.time && $scope.datePickerFrom.date && $scope.timePickerFrom.time) {
+                        var comparisonResult = datetimeService.compareDates($scope.datePickerFrom.date, $scope.datePickerUntil.date);
 
-                    if ($scope.datePickerFrom.date) {
-                        var comparisonResult = datetimeService.compareDates($scope.datePickerUntil.date, $scope.datePickerFrom.date);
+                        if (comparisonResult === 0) {
+                            $scope.timePickerFrom.maxTime = $scope.timePickerUntil.time;
 
-                        if (comparisonResult < 0) {
-                            $scope.datePickerFrom.date = undefined;
+                            comparisonResult = datetimeService.compareTimes($scope.timePickerUntil.time, $scope.timePickerFrom.time);
+
+                            if (comparisonResult < 0) {
+                                $scope.timePickerFrom.time = buildAndGetTimeAgo($scope.timePickerUntil.time);
+                            };
                         };
-                    };
-
+                    }; 
                 };
             };
 
