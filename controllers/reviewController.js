@@ -317,6 +317,7 @@
             };
 
             function captchaWasSuccessed(token) {
+                console.log(token)
                 $scope.form.captcha.isInvalid = false;
                 $scope.review.captchaToken = token;
             };
