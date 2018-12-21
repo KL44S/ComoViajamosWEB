@@ -5,6 +5,39 @@
     overflow: auto;
 }
 
+.review-ok {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999999999999999999999999;
+    background-color: white;
+}
+
+.review-ok-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.review-ok-wrapper img {
+    width: 30%;
+    height: auto;
+}
+
+.review-ok-wrapper p {
+    font-weight: 700;
+    color: #333;
+}
+
+.review-ok-wrapper p::before { 
+    content: '\A'; white-space: pre;
+}
+
 .review-main {
     width: 100%;
     margin: 0;
