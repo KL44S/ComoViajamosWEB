@@ -72,4 +72,11 @@
         }
     });
 
+    app.directive('underConstruction', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/under-construction.html'
+        }
+    });
+
 })();
