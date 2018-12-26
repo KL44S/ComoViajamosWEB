@@ -3,9 +3,9 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$timeout",
+        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$timeout", "recaptchaConstants",
         function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window,
-            datetimeService, utilsService, $timeout) {
+            datetimeService, utilsService, $timeout, recaptchaConstants) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -317,18 +317,18 @@
             };
 
             function captchaWasSuccessed(token) {
-                console.log(token)
                 $scope.form.captcha.isInvalid = false;
                 $scope.review.captchaToken = token;
             };
 
-            function captchaWasExpired() {
-                $scope.form.captcha.isInvalid = true;
-                $scope.review.captchaToken = undefined;
-            };
+            function executeRecaptcha(callback) {
+                grecaptcha.execute(recaptchaConstants.key, { action: recaptchaConstants.action }).then(function (token) {
+                    captchaWasSuccessed(token);
 
-            function captchaWasExcepted() {
-                console.log();
+                    if (callback) {
+                        callback();
+                    };
+                });
             };
 
             function initSpinner() {
@@ -338,17 +338,14 @@
 
             function loadCaptcha() {
                 grecaptcha.ready(function () {
-                    grecaptcha.render('recaptcha', {
-                        'callback': captchaWasSuccessed,
-                        'expiredCallback': captchaWasExpired,
-                        'errorCallback': captchaWasExcepted
+
+                    executeRecaptcha(function () {
+                        $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
+                        tryHideSpinner();
                     });
+
+                    setInterval(executeRecaptcha(), recaptchaConstants.refreshTime);
                 });
-
-
-
-                $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
-                tryHideSpinner();
             };
 
             function loadTransportTypes() {
