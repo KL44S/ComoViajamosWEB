@@ -374,7 +374,7 @@ function TimePicker(time, minTime, maxTime) {
             function isTheTimeValid(time) {
                 var result = false;
 
-                if (time.hours && time.minutes) {
+                if (time.hours !== undefined && time.minutes !== undefined) {
                     result = (time.hours >= minHour && time.hours <= maxHour);
                     result = (result & (time.minutes >= minMinutes && time.minutes <= maxMinutes));
 
