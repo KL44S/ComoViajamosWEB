@@ -34,6 +34,11 @@
     color: #333;
 }
 
+.review-ok-wrapper p.light {
+    font-weight: 300;
+    font-size: 14px;
+}
+
 .review-ok-wrapper p::before { 
     content: '\A'; white-space: pre;
 }

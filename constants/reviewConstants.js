@@ -12,7 +12,8 @@
             dateFormat: "d" + this.dateSeparator + "m" + this.dateSeparator + "Y",
             timeFormat: "H" + this.timeSeparator + "i",
             timePrefix: "T",
-            secondsBeforeDismiss: 4000
+            secondsBeforeDismiss: 3,
+            countdownSecondsInterval: 1000
         };
 
         return reviewConstants;

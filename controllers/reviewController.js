@@ -3,9 +3,9 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$timeout", "recaptchaConstants",
+        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$interval", "recaptchaConstants",
         function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window,
-            datetimeService, utilsService, $timeout, recaptchaConstants) {
+            datetimeService, utilsService, $interval, recaptchaConstants) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -18,6 +18,10 @@
                 if (selectedOption !== undefined) {
                     entity.id = selectedOption.value;
                     entity.description = selectedOption.description;
+                }
+                else {
+                    entity.id = null;
+                    entity.description = "";
                 };
             };
 
@@ -71,6 +75,7 @@
             };
 
             function initReviewForm() {
+                $scope.countdown = $scope.countdown = reviewConstants.secondsBeforeDismiss;
                 $scope.reviewWasSaved = false;
 
                 $scope.form = {
@@ -298,10 +303,16 @@
                             tryHideSpinner();
                             $scope.reviewWasSaved = true;
 
-                            $timeout(function () {
-                                $scope.dismissPopup();
-                            }, reviewConstants.secondsBeforeDismiss);
-
+                            var interval = $interval(function () {
+                                if ($scope.countdown === 0) {
+                                    $interval.cancel(interval);
+                                    $scope.dismissPopup();
+                                    $scope.countdown = reviewConstants.secondsBeforeDismiss;
+                                }
+                                else {
+                                    $scope.countdown = $scope.countdown - 1;
+                                };
+                            }, reviewConstants.countdownSecondsInterval);
                         });
                     }
                     else {
