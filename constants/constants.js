@@ -10,9 +10,9 @@
             "parameterValueAssignment": "=",
             "andParameter": "&",
             "sections": {
-                "index": "/index.html",
-                "stats": "/estadisticas.html",
-                "info": "/info.html"
+                "index": "index.html",
+                "stats": "estadisticas.html",
+                "info": "info.html"
             }
         };
 

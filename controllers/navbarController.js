@@ -6,9 +6,11 @@
 
         function setCurrentPath() {
             var currentPath = $window.location.pathname;
-            var index = "/";
+            var pathSplitted = currentPath.split("/");
 
-            $scope.currentPath = (currentPath === index) ? constants.sections.index : currentPath
+            currentPath = pathSplitted[pathSplitted.length - 1];
+
+            $scope.currentPath = (currentPath === "") ? constants.sections.index : currentPath
         };
 
         function init() {
