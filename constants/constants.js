@@ -3,12 +3,17 @@
 
     app.factory("constants", function () {
         var constants = {
-            "baseUri": "http://localhost:60443/api/", //https://como-viajamos.herokuapp.com/api/
+            "baseUri": "https://como-viajamos.herokuapp.com/api/", //http://localhost:60443/api/
             "interalErrorPath": "error.html",
             "home": "index.html",
             "parameterPrefix": "?",
             "parameterValueAssignment": "=",
-            "andParameter": "&"
+            "andParameter": "&",
+            "sections": {
+                "index": "/index.html",
+                "stats": "/estadisticas.html",
+                "info": "/info.html"
+            }
         };
 
         return constants;

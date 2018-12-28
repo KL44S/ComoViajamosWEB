@@ -7,14 +7,18 @@
     display: flex;
 }
 
-.construction-wrapper {
-
+.construction-text-wrapper {
+    margin: 0;
 }
 
 .construction-img-wrapper,
 .construction-text-wrapper {
-    display: inline-block;
-    margin: 0;
+    display: block;
+
+}
+
+.construction-img-wrapper {
+    margin-left: 30px;
 }
 
 .construction-main-text,
@@ -26,22 +30,9 @@
 .construction-main-text {
     font-weight: bold;
     font-size: 50px;
-
 }
 
 .construction-secondary-text {
     font-size: 24px;
     font-weight: 300;
-}
-
-@media(max-width : 414px) {
-    .construction-img-wrapper,
-    .construction-text-wrapper {
-        display: block;
-    }
-
-    .construction-img-wrapper {
-        margin-left: 30px;
-    }
-
 }

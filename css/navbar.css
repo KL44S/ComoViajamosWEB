@@ -80,7 +80,8 @@
     padding-bottom: 25px;
 }
 
-.sidebar-items a:hover {
+.sidebar-items a:hover,
+.sidebar-items a.selected {
     text-shadow: 0 0 3px white;
 }
 
@@ -138,7 +139,9 @@
     }
 
     .left-navbar-items a:hover,
-    .right-navbar-items a:hover {
+    .right-navbar-items a:hover,
+    .left-navbar-items a.selected,
+    .right-navbar-items a.selected {
         border-bottom: 1px solid white;
         text-shadow: 0 0 3px white;
     }

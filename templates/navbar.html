@@ -4,7 +4,7 @@
     </div>
 
     <div class="right-navbar-items">
-        <a ng-repeat="option in options" ng-href="{{option.link}}">{{option.description}}</a>
+        <a ng-repeat="option in options" ng-class="{'selected': option.link === currentPath}" ng-href="{{option.link}}">{{option.description}}</a>
         <i class="icon-menu" ng-click="openSidebar();"></i>
     </div>
 </div>
