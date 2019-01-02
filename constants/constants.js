@@ -11,7 +11,7 @@
                 "index": "index.html",
                 "stats": "estadisticas.html",
                 "info": "info.html",
-                "error": "error.html"
+                "error": "ierror.html"
             }
         };
 
