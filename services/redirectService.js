@@ -10,7 +10,7 @@
         };
 
         redirectService.redirectToError = function () {
-            redirectService.redirect(constants.interalErrorPath);
+            redirectService.redirect(constants.sections.error);
         };
         
         return redirectService;

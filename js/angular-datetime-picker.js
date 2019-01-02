@@ -360,12 +360,22 @@ function TimePicker(time, minTime, maxTime) {
                 return formattedTime;
             };
 
+            function isFirefox() {
+                var userAgent = window.navigator.userAgent;
+                var regExp = /firefox/i;
+
+                return (regExp.test(userAgent));
+            };
+
             function fillWithZerosTheInputValueIfItIsNecessary (input) {
 
                 if (input.value !== undefined && input.value.toString().length === 1) {
                     input.value = "0" + input.value;
                 };
 
+                if (isFirefox()) {
+                    input.type = "text";
+                };
                 //console.log(input.value);
             };
 

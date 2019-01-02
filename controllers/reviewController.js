@@ -3,9 +3,9 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$interval", "recaptchaConstants",
+        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$interval", "recaptchaConstants", "redirectService",
         function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window,
-            datetimeService, utilsService, $interval, recaptchaConstants) {
+            datetimeService, utilsService, $interval, recaptchaConstants, redirectService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -313,6 +313,8 @@
                                     $scope.countdown = $scope.countdown - 1;
                                 };
                             }, reviewConstants.countdownSecondsInterval);
+                        }, function () {
+                            redirectService.redirectToError();
                         });
                     }
                     else {
@@ -353,9 +355,10 @@
                     executeRecaptcha(function () {
                         $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
                         tryHideSpinner();
+                        redi
                     });
 
-                    setInterval(executeRecaptcha(), recaptchaConstants.refreshTime);
+                    $interval(function () { executeRecaptcha() }, recaptchaConstants.refreshTime);
                 });
             };
 
