@@ -97,10 +97,6 @@
 }
 
 @media(min-width : 321px) {
-    .main-h1 {
-        font-size: 70px;
-    }
-
     .main {
         width: 90%;
     }

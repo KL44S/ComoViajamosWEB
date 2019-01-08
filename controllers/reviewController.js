@@ -355,7 +355,6 @@
                     executeRecaptcha(function () {
                         $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
                         tryHideSpinner();
-                        redi
                     });
 
                     $interval(function () { executeRecaptcha() }, recaptchaConstants.refreshTime);
