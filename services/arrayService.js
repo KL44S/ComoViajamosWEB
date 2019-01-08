@@ -26,6 +26,16 @@
             return foundIndex;
         };
 
+        arrayService.getAttributeSubArray = function (array, attribute) {
+            var attributeArray = [];
+
+            for (var i = 0; i < array.length; i++) {
+                attributeArray.push(array[i][attribute]);
+            };
+            
+            return attributeArray;
+        };
+
         arrayService.getArrayElementsByFilters = function (array, filters) {
             var matchedElements = [];
 

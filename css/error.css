@@ -1,0 +1,49 @@
+﻿body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgb(250, 250, 250);
+}
+
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url("../src/error-bk.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.error-wrapper {
+    margin-top: -90px;
+}
+
+.error-container .wrapper {
+    display: block;
+    text-align: center;
+}
+
+.error-container .wrapper h1 {
+    font-weight: 900;
+    font-size: 50px;
+    margin-bottom: 0;
+}
+
+.error-container .wrapper h2 {
+    font-size: 25px;
+    font-weight: 300;
+    margin-top: 0;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.error-container .wrapper h1,
+.error-container .wrapper h2 {
+    color: #333;
+}
+
+.error-logo {
+    width: 80%;
+}

@@ -343,6 +343,8 @@ function TimePicker(time, minTime, maxTime) {
             var minMinutes = 0;
             var maxMinutes = 59;
             var timeSeparator = ":";
+            var minutePickerId = "minutePicker";
+            var hourPickerId = "hourPicker";
 
             function getSelectedTime(time) {
                 var selectedTime = {
@@ -358,6 +360,25 @@ function TimePicker(time, minTime, maxTime) {
                 return formattedTime;
             };
 
+            function isFirefox() {
+                var userAgent = window.navigator.userAgent;
+                var regExp = /firefox/i;
+
+                return (regExp.test(userAgent));
+            };
+
+            function fillWithZerosTheInputValueIfItIsNecessary (input) {
+
+                if (input.value !== undefined && input.value.toString().length === 1) {
+                    input.value = "0" + input.value;
+                };
+
+                if (isFirefox()) {
+                    input.type = "text";
+                };
+                //console.log(input.value);
+            };
+
             function init() {
                 timePickers.push({
                     isTimePickerOpen: false
@@ -369,12 +390,15 @@ function TimePicker(time, minTime, maxTime) {
                         vm.selectedTime = new SelectedTime($scope.picker.time);
                     };
                 }, true);
+
+                vm.minutePickerId = minutePickerId + vm.timePickerIndex;
+                vm.hourPickerId = hourPickerId + vm.timePickerIndex;
             };
 
             function isTheTimeValid(time) {
                 var result = false;
 
-                if (time.hours && time.minutes) {
+                if (time.hours !== undefined && time.minutes !== undefined) {
                     result = (time.hours >= minHour && time.hours <= maxHour);
                     result = (result & (time.minutes >= minMinutes && time.minutes <= maxMinutes));
 
@@ -406,6 +430,14 @@ function TimePicker(time, minTime, maxTime) {
                 return result;
             };
 
+            function processInputs() {
+                var minuteInput = document.getElementById(vm.minutePickerId);
+                fillWithZerosTheInputValueIfItIsNecessary(minuteInput);
+
+                var hourInput = document.getElementById(vm.hourPickerId);
+                fillWithZerosTheInputValueIfItIsNecessary(hourInput);
+            };
+
             vm.updateHours = function () {
                 if (isTheTimeValid(vm.selectedTime.time)) {
                     $scope.picker.time.setHours(vm.selectedTime.time.hours);
@@ -435,7 +467,8 @@ function TimePicker(time, minTime, maxTime) {
                     $event.stopPropagation();
 
                     timePickers[vm.timePickerIndex].isTimePickerOpen = true;
-                    //initDatePicker();
+
+                    processInputs();
                 };
             };
 

@@ -163,7 +163,16 @@ i.time {
     -webkit-appearance: none;
 }
 
+.hours-picker,
+.minutes-picker {
+    -moz-appearance:textfield;
+}
+
 .time-separator {
     margin-left: 2px;
     margin-right: 2px;
+}
+
+div.hidden {
+    display: none;
 }

@@ -1,5 +1,16 @@
 ﻿<div class="review-container" id="reviewContainer">
 
+    <div class="review-ok" ng-if="reviewWasSaved">
+        <div class="review-ok-wrapper">
+            <div>
+                <img src="src/logo-ok.svg">
+                <p>Listo! Gracias por tu opinión!</p>
+                <p class="light">Volviendo en {{countdown}}</p>
+            </div>
+
+        </div>
+    </div>
+
     <popup-header></popup-header>
     <popup-body>
         <div class="review-main">
@@ -72,12 +83,6 @@
                             <custom-multiple-select items="reasons" selected='""' change="reasonsHasBeenSelected(selectedItems);"></custom-multiple-select>
                         </div>
                     </div>
-                </div>
-
-                <hr />
-
-                <div class="form-block">
-                    <div id="recaptcha" ng-class="{'ng-invalid': form.captcha.isInvalid}" class="g-recaptcha" data-sitekey="6Le_OnQUAAAAAKTZbYcByh3tLeP3ZFdXJxv0yEdH"></div>
                 </div>
 
                 <hr />

@@ -1,0 +1,38 @@
+﻿.construction {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.construction-text-wrapper {
+    margin: 0;
+}
+
+.construction-img-wrapper,
+.construction-text-wrapper {
+    display: block;
+
+}
+
+.construction-img-wrapper {
+    margin-left: 30px;
+}
+
+.construction-main-text,
+.construction-secondary-text {
+    margin: 0;
+    color: white;
+}
+
+.construction-main-text {
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.construction-secondary-text {
+    font-size: 24px;
+    font-weight: 300;
+}

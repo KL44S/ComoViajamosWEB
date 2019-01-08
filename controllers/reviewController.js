@@ -3,9 +3,9 @@
     var app = angular.module("CV");
 
     app.controller("reviewController", ["$scope", "reviewConstants", "constants", "transportService", "$http", "customSelectService", "arrayService",
-        "reviewService", "spinnerService", "$window", "datetimeService",
+        "reviewService", "spinnerService", "$window", "datetimeService", "utilsService", "$interval", "recaptchaConstants", "redirectService",
         function ($scope, reviewConstants, constants, transportService, $http, customSelectService, arrayService, reviewService, spinnerService, $window,
-            datetimeService) {
+            datetimeService, utilsService, $interval, recaptchaConstants, redirectService) {
 
             //Privado
             function getFormattedDate(momentDate) {
@@ -18,15 +18,15 @@
                 if (selectedOption !== undefined) {
                     entity.id = selectedOption.value;
                     entity.description = selectedOption.description;
+                }
+                else {
+                    entity.id = null;
+                    entity.description = "";
                 };
             };
 
             function addZeroIfItIsNecessary(number) {
-                var numberAsString = number.toString();
-
-                if (numberAsString.length === 1) {
-                    numberAsString = "0" + numberAsString;
-                };
+                var numberAsString = utilsService.getZeroPaddingNumber(number.toString(), 2);
 
                 return numberAsString;
             };
@@ -75,6 +75,9 @@
             };
 
             function initReviewForm() {
+                $scope.countdown = $scope.countdown = reviewConstants.secondsBeforeDismiss;
+                $scope.reviewWasSaved = false;
+
                 $scope.form = {
                     transportType: new FormItem(),
                     transport: new FormItem(),
@@ -96,13 +99,24 @@
                         this.reason.isInvalid = !reviewService.isReasonValid($scope.reasons, $scope.selectedReasons);
 
                         //Fechas
-                        var isDateFromValid = reviewService.isDatetimeValid($scope.dateFrom);
-                        var isDateUntilvalid = reviewService.isDatetimeValid($scope.dateUntil);
-                        var isTimeFromValid = reviewService.isDatetimeValid($scope.timeFrom);
-                        var isTimeUntilValid = reviewService.isDatetimeValid($scope.timeUntil);
+                        var isDateFromValid = reviewService.isDatetimeValid($scope.datePickerFrom.date);
+                        var isDateUntilvalid = reviewService.isDatetimeValid($scope.datePickerUntil.date);
+                        var isTimeFromValid = reviewService.isDatetimeValid($scope.timePickerFrom.time);
+                        var isTimeUntilValid = reviewService.isDatetimeValid($scope.timePickerUntil.time);
 
-                        var areDatetimesValid = reviewService.areDatetimesValid(new CustomDatetime($scope.dateFrom, $scope.timeFrom),
-                            new CustomDatetime($scope.dateUntil, $scope.timeUntil));
+                        var datetimeFrom = new Date($scope.datePickerFrom.date.getFullYear(),
+                                                    $scope.datePickerFrom.date.getMonth(),
+                                                    $scope.datePickerFrom.date.getDate(),
+                                                    $scope.timePickerFrom.time.getHours(),
+                                                    $scope.timePickerFrom.time.getMinutes());
+
+                        var datetimeUntil = new Date($scope.datePickerUntil.date.getFullYear(),
+                            $scope.datePickerUntil.date.getMonth(),
+                            $scope.datePickerUntil.date.getDate(),
+                            $scope.timePickerUntil.time.getHours(),
+                            $scope.timePickerUntil.time.getMinutes());
+
+                        var areDatetimesValid = reviewService.areDatetimesValid(datetimeFrom, datetimeUntil);
 
                         this.dateFrom.isInvalid = !(isDateFromValid && areDatetimesValid);
                         this.dateUntil.isInvalid = !(isDateUntilvalid && areDatetimesValid);
@@ -268,43 +282,66 @@
                 };
 
                 $scope.saveReview = function () {
+                    spinnerService.showSpinner($scope.containerId);
+
                     $scope.form.validate();
 
                     if ($scope.form.isValid()) {
-                        $scope.review.datetimeFrom = getDatetimeFormattedToSave($scope.dateFrom, $scope.timeFrom);
-                        $scope.review.datetimeUntil = getDatetimeFormattedToSave($scope.dateUntil, $scope.timeUntil);
+                        $scope.review.datetimeFrom = getDatetimeFormattedToSave($scope.datePickerFrom.date, $scope.timePickerFrom.time);
+                        $scope.review.datetimeUntil = getDatetimeFormattedToSave($scope.datePickerUntil.date, $scope.timePickerUntil.time);
                         $scope.review.travelFeelingId = $scope.selectedFeeling.id;
-                        $scope.review.travelFeelingReasonIds = $scope.selectedReasons;
+
+                        var valueAttribute = "value";
+                        $scope.review.travelFeelingReasonIds = arrayService.getAttributeSubArray($scope.selectedReasons, valueAttribute);
+
                         $scope.review.transportId = $scope.selectedTransport.id;
                         $scope.review.transportBranchId = $scope.selectedBranch.id;
                         $scope.review.transportBranchOrientationId = $scope.selectedOrientation.id;
 
                         reviewService.saveReview($scope.review).then(function () {
-                            $scope.dismissPopup();
+
+                            tryHideSpinner();
+                            $scope.reviewWasSaved = true;
+
+                            var interval = $interval(function () {
+                                if ($scope.countdown === 0) {
+                                    $interval.cancel(interval);
+                                    $scope.dismissPopup();
+                                    $scope.countdown = reviewConstants.secondsBeforeDismiss;
+                                }
+                                else {
+                                    $scope.countdown = $scope.countdown - 1;
+                                };
+                            }, reviewConstants.countdownSecondsInterval);
+                        }, function () {
+                            redirectService.redirectToError();
                         });
+                    }
+                    else {
+                        tryHideSpinner();
                     };
                 };
             };
 
             function getDatetimeFormattedToSave(date, time) {
-                var datetime = date + reviewConstants.timePrefix + time;
+                var datetime = formatJsDate(date) + reviewConstants.timePrefix + formatJsTime(time);
 
                 return datetime;
             };
 
             function captchaWasSuccessed(token) {
-                console.log(token);
                 $scope.form.captcha.isInvalid = false;
                 $scope.review.captchaToken = token;
             };
 
-            function captchaWasExpired() {
-                $scope.form.captcha.isInvalid = true;
-                $scope.review.captchaToken = undefined;
-            };
+            function executeRecaptcha(callback) {
+                grecaptcha.execute(recaptchaConstants.key, { action: recaptchaConstants.action }).then(function (token) {
+                    captchaWasSuccessed(token);
 
-            function captchaWasExcepted() {
-                console.log();
+                    if (callback) {
+                        callback();
+                    };
+                });
             };
 
             function initSpinner() {
@@ -314,17 +351,15 @@
 
             function loadCaptcha() {
                 grecaptcha.ready(function () {
-                    grecaptcha.render('recaptcha', {
-                        'callback': captchaWasSuccessed,
-                        'expiredCallback': captchaWasExpired,
-                        'errorCallback': captchaWasExcepted
+
+                    executeRecaptcha(function () {
+                        $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
+                        tryHideSpinner();
+                        redi
                     });
+
+                    $interval(function () { executeRecaptcha() }, recaptchaConstants.refreshTime);
                 });
-
-
-
-                $scope.loadingNecessaryElements[$scope.loadingNecessaryElementsIndexes.captcha] = true;
-                tryHideSpinner();
             };
 
             function loadTransportTypes() {

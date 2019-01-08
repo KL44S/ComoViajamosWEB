@@ -2,21 +2,37 @@
 
     var app = angular.module("CV");
 
-    app.controller("navbarController", ["$scope", function ($scope) {
+    app.controller("navbarController", ["$scope", "constants", "$window", function ($scope, constants, $window) {
 
-        $scope.isSidebarOpen = false;
-        $scope.options = [
-            new NavbarOption("#", "ESTADÍSTICAS"),
-            new NavbarOption("#", "INFO"),
-        ];
+        function setCurrentPath() {
+            var currentPath = $window.location.pathname;
+            var pathSplitted = currentPath.split("/");
 
-        $scope.openSidebar = function () {
-            $scope.isSidebarOpen = true;
+            currentPath = pathSplitted[pathSplitted.length - 1];
+
+            $scope.currentPath = (currentPath === "") ? constants.sections.index : currentPath
         };
 
-        $scope.closeSidebar = function () {
+        function init() {
             $scope.isSidebarOpen = false;
+            $scope.options = [
+                new NavbarOption(constants.sections.index, "INICIO"),
+                new NavbarOption(constants.sections.stats, "ESTADÍSTICAS"),
+                new NavbarOption(constants.sections.info, "INFO"),
+            ];
+
+            $scope.openSidebar = function () {
+                $scope.isSidebarOpen = true;
+            };
+
+            $scope.closeSidebar = function () {
+                $scope.isSidebarOpen = false;
+            };
+
+            setCurrentPath();
         };
+
+        init();
     }]);
 
 })();

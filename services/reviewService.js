@@ -14,10 +14,12 @@
             };
 
             reviewService.areDatetimesValid = function (datetimeFrom, datetimeUntil) {
-                var datetimeFromAsInt = datetimeFrom.toIntFormatted(serviceConstants.dateSeparator, serviceConstants.timeSeparator);
-                var datetimeUntilAsInt = datetimeUntil.toIntFormatted(serviceConstants.dateSeparator, serviceConstants.timeSeparator);
+                datetimeFrom.setMilliseconds(0);
+                datetimeUntil.setMilliseconds(0);
+                datetimeFrom.setSeconds(0);
+                datetimeUntil.setSeconds(0);
 
-                var result = (datetimeFromAsInt < datetimeUntilAsInt);
+                var result = (datetimeFrom.getTime() < datetimeUntil.getTime());
 
                 return result;
             };
