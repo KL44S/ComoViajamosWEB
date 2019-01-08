@@ -4,13 +4,13 @@
 <div ng-if="vm.isDatePickerOpen()" class="date-picker date-picker-clickable{{vm.datePickerIndex}}">
 
     <div class="month-picker date-picker-clickable{{vm.datePickerIndex}}">
-        <i class="icon-left prev-month date-picker-clickable{{vm.datePickerIndex}}" ng-click="vm.previousMonth();"><</i>
+        <i class="icon-left-open prev-month date-picker-clickable{{vm.datePickerIndex}}" ng-click="vm.previousMonth();"></i>
 
         <div class="month date-picker-clickable{{vm.datePickerIndex}}">
             <strong class="date-picker-clickable{{vm.datePickerIndex}}">{{vm.currentMonth.month.description + " de " + vm.currentMonth.date.getFullYear()}}</strong>
         </div>
 
-        <i class="icon-right next-month date-picker-clickable{{vm.datePickerIndex}}" ng-click="vm.nextMonth();">></i>
+        <i class="icon-right-open next-month date-picker-clickable{{vm.datePickerIndex}}" ng-click="vm.nextMonth();"></i>
     </div>
 
     <div class="day-picker date-picker-clickable{{vm.datePickerIndex}}">

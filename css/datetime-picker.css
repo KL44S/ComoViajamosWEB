@@ -53,6 +53,12 @@ time-picker {
     cursor: pointer;
 }
 
+.next-month,
+.prev-month {
+    font-size: 14px;
+    margin-top: 3px;
+}
+
 .prev-month {
     float: left;
 }
